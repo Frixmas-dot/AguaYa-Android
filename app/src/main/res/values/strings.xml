@@ -1,3 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AguaYa</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_reportar">Reportar</string>
+    <string name="nav_mapa">Mapa</string>
+    <string name="nav_estadisticas">Estadísticas</string>
+    <string name="nav_admin">Admin</string>
+
+    <!-- Home screen -->
+    <string name="hero_title">El agua es un derecho.\nExigámoslo.</string>
+    <string name="hero_subtitle">Plataforma ciudadana de reportes de agua para Santa Marta</string>
+    <string name="hero_location">🌊 Santa Marta, Colombia</string>
+    <string name="btn_reportar">Hacer un reporte</string>
+    <string name="btn_ver_mapa">Ver mapa en vivo</string>
+    <string name="section_problemas">¿Qué problema tienes?</string>
+    <string name="section_estadisticas">Impacto Ciudadano</string>
+    <string name="section_como_funciona">¿Cómo funciona?</string>
+
+    <!-- Problem types -->
+    <string name="tipo_sin_agua">Sin agua</string>
+    <string name="tipo_sin_agua_desc">Corte total del servicio</string>
+    <string name="tipo_baja_presion">Baja presión</string>
+    <string name="tipo_baja_presion_desc">El agua llega sin fuerza</string>
+    <string name="tipo_agua_sucia">Agua sucia</string>
+    <string name="tipo_agua_sucia_desc">Llega turbia o con mal olor</string>
+    <string name="tipo_fuga">Fuga o ruptura</string>
+    <string name="tipo_fuga_desc">Desperdicio en vía pública</string>
+
+    <!-- Report form -->
+    <string name="form_title_nuevo_reporte">Nuevo Reporte</string>
+    <string name="form_label_barrio">Barrio</string>
+    <string name="form_hint_barrio">Ej: Pescaíto, Mamatoco...</string>
+    <string name="form_label_direccion">Dirección exacta o referencia</string>
+    <string name="form_hint_direccion">Ej: Calle 10 con Carrera 5</string>
+    <string name="form_label_descripcion">Describe el problema</string>
+    <string name="form_hint_descripcion">Detalles de lo que ocurre...</string>
+    <string name="form_label_urgencia">Urgencia</string>
+    <string name="form_urgencia_baja">Baja (molestia menor)</string>
+    <string name="form_urgencia_media">Media (afecta rutina)</string>
+    <string name="form_urgencia_alta">Alta (emergencia sanitaria)</string>
+    <string name="form_label_foto">Foto (Opcional pero ayuda)</string>
+    <string name="form_btn_enviar">Enviar Reporte</string>
+    <string name="form_btn_tomar_foto">Tomar Foto</string>
+    <string name="form_error_campos_vacios">Por favor llena todos los campos obligatorios</string>
+    <string name="form_error_ubicacion">No pudimos obtener tu ubicación</string>
+    <string name="form_exito">Reporte enviado correctamente</string>
+
+    <!-- Map -->
+    <string name="mapa_title">Mapa de Reportes</string>
+    <string name="mapa_filtro_todos">Todos</string>
+    <string name="mapa_filtro_pendientes">Pendientes</string>
+    <string name="mapa_filtro_en_proceso">En Proceso</string>
+    <string name="mapa_filtro_resueltos">Resueltos</string>
+
+    <!-- Stats -->
+    <string name="stats_title">Estadísticas</string>
+    <string name="stats_kpi_total">Total Reportes</string>
+    <string name="stats_kpi_barrios">Barrios Afectados</string>
+    <string name="stats_kpi_resueltos">% Resueltos</string>
+    <string name="stats_chart_tipos">Reportes por Tipo</string>
+    <string name="stats_chart_barrios">Barrios Más Afectados</string>
+
+    <!-- Admin -->
+    <string name="admin_title">Administración</string>
+    <string name="admin_login_prompt">Ingresa la clave de administrador</string>
+    <string name="admin_login_btn">Entrar</string>
+    <string name="admin_action_marcar_proceso">Marcar En Proceso</string>
+    <string name="admin_action_marcar_resuelto">Marcar Resuelto</string>
+    <string name="admin_action_eliminar">Eliminar</string>
+    <string name="admin_confirm_eliminar">¿Seguro que deseas eliminar este reporte?</string>
+    <string name="admin_si">Sí</string>
+    <string name="admin_no">No</string>
+
+    <!-- General -->
+    <string name="loading">Cargando...</string>
+    <string name="error_generico">Ha ocurrido un error</string>
+    <string name="retry">Reintentar</string>
+    <string name="empty_state">No hay datos disponibles</string>
+    <string name="confirmar">Confirmar</string>
+
+    <!-- How it works -->
+    <string name="step_1_title">1. Reporta</string>
+    <string name="step_1_desc">Describe el problema y tu barrio</string>
+    <string name="step_2_title">2. Se publica</string>
+    <string name="step_2_desc">Tu reporte aparece en el mapa en tiempo real</string>
+    <string name="step_3_title">3. Se visibiliza</string>
+    <string name="step_3_desc">Otros ciudadanos confirman el problema</string>
+    <string name="step_4_title">4. Se escala</string>
+    <string name="step_4_desc">Las zonas críticas reciben atención prioritaria</string>
+
+    <!-- Counters -->
+    <string name="counter_reportes">Reportes este mes</string>
+    <string name="counter_barrios">Barrios afectados</string>
+    <string name="counter_verificados">Reportes verificados</string>
+
+    <!-- Estado -->
+    <string name="estado_pendiente">Pendiente</string>
+    <string name="estado_en_proceso">En Proceso</string>
+    <string name="estado_resuelto">Resuelto</string>
+    
+    <string name="confirmaciones_count">%d confirmaciones</string>
 </resources>
