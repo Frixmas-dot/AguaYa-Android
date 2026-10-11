@@ -10,7 +10,6 @@ public interface WeatherApiService {
     Call<WeatherModel> getWeather(
             @Query("latitude") double latitude,
             @Query("longitude") double longitude,
-            @Query("current_weather") boolean currentWeather,
             @Query("current") String current
     );
 }

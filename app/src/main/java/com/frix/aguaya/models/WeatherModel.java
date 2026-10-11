@@ -3,6 +3,7 @@ package com.frix.aguaya.models;
 import com.google.gson.annotations.SerializedName;
 
 public class WeatherModel {
+    @SerializedName(value = "current", alternate = {"current_weather"})
     private Current current;
 
     public Current getCurrent() {
@@ -14,18 +15,19 @@ public class WeatherModel {
     }
 
     public static class Current {
-        @SerializedName("temperature_2m")
+        @SerializedName(value = "temperature2m", alternate = {"temperature_2m", "temperature"})
         private double temperature2m;
         
-        @SerializedName("relative_humidity_2m")
+        @SerializedName(value = "relativeHumidity2m", alternate = {"relative_humidity_2m", "relativehumidity_2m", "humidity"})
         private int relativeHumidity2m;
         
-        @SerializedName("wind_speed_10m")
+        @SerializedName(value = "windSpeed10m", alternate = {"wind_speed_10m", "windspeed_10m", "windspeed"})
         private double windSpeed10m;
         
+        @SerializedName(value = "precipitation", alternate = {"precip"})
         private double precipitation;
         
-        @SerializedName("weather_code")
+        @SerializedName(value = "weatherCode", alternate = {"weather_code", "weathercode"})
         private int weatherCode;
 
         public double getTemperature2m() { return temperature2m; }

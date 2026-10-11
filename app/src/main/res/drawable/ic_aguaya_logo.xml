@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Main Outer Drop (Deep Agua Navy) -->
+    <path
+        android:fillColor="#0C4A6E"
+        android:pathData="M24,4 C17,11.5 10,19.5 10,28 C10,36.8 16.3,44 24,44 C31.7,44 38,36.8 38,28 C38,19.5 31,11.5 24,4 Z" />
+    <!-- Middle Drop Layer (Azure Water) -->
+    <path
+        android:fillColor="#0EA5E9"
+        android:pathData="M24,13 C19.5,19 15,25 15,30 C15,35.2 19,39.5 24,39.5 C29,39.5 33,35.2 33,30 C33,25 28.5,19 24,13 Z" />
+    <!-- Inner Sparkle Wave (Pure White Core) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,22 C21.2,25.5 18.5,28.8 18.5,32 C18.5,35 21,36.8 24,36.8 C27,36.8 29.5,35 29.5,32 C29.5,28.8 26.8,25.5 24,22 Z" />
+</vector>

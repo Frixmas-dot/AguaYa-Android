@@ -129,32 +129,91 @@ public class ReportarFragment extends Fragment {
     private void seleccionarTipo(String tipo) {
         viewModel.tipoSeleccionado.setValue(tipo);
         
-        // Reset all
-        binding.cardTipoSinAgua.setAlpha(0.5f);
-        binding.cardTipoBajaPresion.setAlpha(0.5f);
-        binding.cardTipoAguaSucia.setAlpha(0.5f);
-        binding.cardTipoFuga.setAlpha(0.5f);
+        int strokeDefault = android.graphics.Color.parseColor("#E2E8F0");
+        int bgDefault = android.graphics.Color.WHITE;
         
-        // Select one
-        switch (tipo) {
-            case "Sin agua": binding.cardTipoSinAgua.setAlpha(1.0f); break;
-            case "Baja presión": binding.cardTipoBajaPresion.setAlpha(1.0f); break;
-            case "Agua sucia": binding.cardTipoAguaSucia.setAlpha(1.0f); break;
-            case "Fuga": binding.cardTipoFuga.setAlpha(1.0f); break;
+        // Reset all
+        binding.cardTipoSinAgua.setStrokeColor(strokeDefault);
+        binding.cardTipoSinAgua.setCardBackgroundColor(bgDefault);
+        binding.cardTipoSinAgua.setStrokeWidth(dpToPx(1));
+        binding.cardTipoSinAgua.setCardElevation(dpToPx(1));
+
+        binding.cardTipoBajaPresion.setStrokeColor(strokeDefault);
+        binding.cardTipoBajaPresion.setCardBackgroundColor(bgDefault);
+        binding.cardTipoBajaPresion.setStrokeWidth(dpToPx(1));
+        binding.cardTipoBajaPresion.setCardElevation(dpToPx(1));
+
+        binding.cardTipoAguaSucia.setStrokeColor(strokeDefault);
+        binding.cardTipoAguaSucia.setCardBackgroundColor(bgDefault);
+        binding.cardTipoAguaSucia.setStrokeWidth(dpToPx(1));
+        binding.cardTipoAguaSucia.setCardElevation(dpToPx(1));
+
+        binding.cardTipoFuga.setStrokeColor(strokeDefault);
+        binding.cardTipoFuga.setCardBackgroundColor(bgDefault);
+        binding.cardTipoFuga.setStrokeWidth(dpToPx(1));
+        binding.cardTipoFuga.setCardElevation(dpToPx(1));
+
+        // Highlight selected
+        if ("Sin agua".equals(tipo)) {
+            binding.cardTipoSinAgua.setStrokeColor(android.graphics.Color.parseColor("#EF4444"));
+            binding.cardTipoSinAgua.setCardBackgroundColor(android.graphics.Color.parseColor("#FEF2F2"));
+            binding.cardTipoSinAgua.setStrokeWidth(dpToPx(2));
+            binding.cardTipoSinAgua.setCardElevation(dpToPx(4));
+        } else if ("Baja presión".equals(tipo)) {
+            binding.cardTipoBajaPresion.setStrokeColor(android.graphics.Color.parseColor("#F97316"));
+            binding.cardTipoBajaPresion.setCardBackgroundColor(android.graphics.Color.parseColor("#FFF7ED"));
+            binding.cardTipoBajaPresion.setStrokeWidth(dpToPx(2));
+            binding.cardTipoBajaPresion.setCardElevation(dpToPx(4));
+        } else if ("Agua sucia".equals(tipo)) {
+            binding.cardTipoAguaSucia.setStrokeColor(android.graphics.Color.parseColor("#A16207"));
+            binding.cardTipoAguaSucia.setCardBackgroundColor(android.graphics.Color.parseColor("#FEFCE8"));
+            binding.cardTipoAguaSucia.setStrokeWidth(dpToPx(2));
+            binding.cardTipoAguaSucia.setCardElevation(dpToPx(4));
+        } else if ("Fuga".equals(tipo)) {
+            binding.cardTipoFuga.setStrokeColor(android.graphics.Color.parseColor("#0EA5E9"));
+            binding.cardTipoFuga.setCardBackgroundColor(android.graphics.Color.parseColor("#F0F9FF"));
+            binding.cardTipoFuga.setStrokeWidth(dpToPx(2));
+            binding.cardTipoFuga.setCardElevation(dpToPx(4));
         }
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
     private void seleccionarUrgencia(String urgencia) {
         viewModel.urgencia.setValue(urgencia);
         
-        binding.btnUrgenciaBaja.setAlpha(0.5f);
-        binding.btnUrgenciaMedia.setAlpha(0.5f);
-        binding.btnUrgenciaAlta.setAlpha(0.5f);
-        
-        switch (urgencia) {
-            case "baja": binding.btnUrgenciaBaja.setAlpha(1.0f); break;
-            case "media": binding.btnUrgenciaMedia.setAlpha(1.0f); break;
-            case "alta": binding.btnUrgenciaAlta.setAlpha(1.0f); break;
+        int strokeDefault = android.graphics.Color.parseColor("#E2E8F0");
+        int bgDefault = android.graphics.Color.WHITE;
+        int textDefault = android.graphics.Color.parseColor("#64748B");
+
+        // Reset all
+        binding.btnUrgenciaBaja.setStrokeColor(android.content.res.ColorStateList.valueOf(strokeDefault));
+        binding.btnUrgenciaBaja.setBackgroundColor(bgDefault);
+        binding.btnUrgenciaBaja.setTextColor(textDefault);
+
+        binding.btnUrgenciaMedia.setStrokeColor(android.content.res.ColorStateList.valueOf(strokeDefault));
+        binding.btnUrgenciaMedia.setBackgroundColor(bgDefault);
+        binding.btnUrgenciaMedia.setTextColor(textDefault);
+
+        binding.btnUrgenciaAlta.setStrokeColor(android.content.res.ColorStateList.valueOf(strokeDefault));
+        binding.btnUrgenciaAlta.setBackgroundColor(bgDefault);
+        binding.btnUrgenciaAlta.setTextColor(textDefault);
+
+        // Highlight selected
+        if ("baja".equals(urgencia)) {
+            binding.btnUrgenciaBaja.setStrokeColor(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#22C55E")));
+            binding.btnUrgenciaBaja.setBackgroundColor(android.graphics.Color.parseColor("#DCFCE7"));
+            binding.btnUrgenciaBaja.setTextColor(android.graphics.Color.parseColor("#15803D"));
+        } else if ("media".equals(urgencia)) {
+            binding.btnUrgenciaMedia.setStrokeColor(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#F97316")));
+            binding.btnUrgenciaMedia.setBackgroundColor(android.graphics.Color.parseColor("#FFEDD5"));
+            binding.btnUrgenciaMedia.setTextColor(android.graphics.Color.parseColor("#C2410C"));
+        } else if ("alta".equals(urgencia)) {
+            binding.btnUrgenciaAlta.setStrokeColor(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#EF4444")));
+            binding.btnUrgenciaAlta.setBackgroundColor(android.graphics.Color.parseColor("#FEE2E2"));
+            binding.btnUrgenciaAlta.setTextColor(android.graphics.Color.parseColor("#B91C1C"));
         }
     }
 
@@ -245,11 +304,7 @@ public class ReportarFragment extends Fragment {
         ocultarFotoPreview();
         seleccionarUrgencia("media");
         // Deseleccionar tipo
-        viewModel.tipoSeleccionado.setValue(null);
-        binding.cardTipoSinAgua.setAlpha(0.5f);
-        binding.cardTipoBajaPresion.setAlpha(0.5f);
-        binding.cardTipoAguaSucia.setAlpha(0.5f);
-        binding.cardTipoFuga.setAlpha(0.5f);
+        seleccionarTipo(null);
     }
 
     @Override

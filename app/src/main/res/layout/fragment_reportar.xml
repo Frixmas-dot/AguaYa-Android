@@ -64,6 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¿Qué problema tienes?"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
                 
@@ -73,61 +75,73 @@
                 android:columnCount="2"
                 android:layout_marginBottom="16dp">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardTipoSinAgua"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:alpha="0.5"
-                    app:cardCornerRadius="8dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1.5dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="12dp">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tipo_sin_agua" app:tint="@color/tipo_sin_agua"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sin agua" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvLabelSinAgua" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sin agua" android:textColor="@color/text_primary" android:textStyle="bold" android:layout_marginTop="6dp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
                 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardTipoBajaPresion"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:alpha="0.5"
-                    app:cardCornerRadius="8dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1.5dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="12dp">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tipo_baja_presion" app:tint="@color/tipo_baja_presion"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Baja presión" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvLabelBajaPresion" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Baja presión" android:textColor="@color/text_primary" android:textStyle="bold" android:layout_marginTop="6dp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
                 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardTipoAguaSucia"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:alpha="0.5"
-                    app:cardCornerRadius="8dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1.5dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="12dp">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tipo_agua_sucia" app:tint="@color/tipo_agua_sucia"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Agua sucia" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvLabelAguaSucia" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Agua sucia" android:textColor="@color/text_primary" android:textStyle="bold" android:layout_marginTop="6dp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
                 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardTipoFuga"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:alpha="0.5"
-                    app:cardCornerRadius="8dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1.5dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="12dp">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tipo_fuga" app:tint="@color/tipo_fuga"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuga" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvLabelFuga" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuga" android:textColor="@color/text_primary" android:textStyle="bold" android:layout_marginTop="6dp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </GridLayout>
 
             <!-- Fields -->
@@ -136,12 +150,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:hint="Barrio (Requerido)">
+                android:hint="Barrio (Requerido)"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/agua_primary"
+                app:hintTextColor="@color/agua_primary">
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/etBarrio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:completionThreshold="1"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,11 +171,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="Dirección exacta (Opcional)"
-                app:helperText="Solo visible para administradores">
+                app:helperText="Solo visible para administradores"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/agua_primary"
+                app:hintTextColor="@color/agua_primary">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDireccion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
                     android:inputType="textPostalAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -164,15 +190,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Descripción"
+                android:hint="Descripción del problema"
                 app:counterEnabled="true"
-                app:counterMaxLength="300">
+                app:counterMaxLength="300"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/agua_primary"
+                app:hintTextColor="@color/agua_primary">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lines="4"
                     android:gravity="top|start"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
                     android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -181,6 +213,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nivel de urgencia"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
                 
@@ -192,33 +226,39 @@
                 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnUrgenciaBaja"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
                     android:text="🟢 Baja"
-                    android:alpha="0.5"/>
+                    android:textColor="@color/text_primary"
+                    app:strokeColor="@color/card_stroke"
+                    app:cornerRadius="12dp"/>
                     
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnUrgenciaMedia"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginHorizontal="4dp"
                     android:text="🟠 Media"
-                    android:alpha="0.5"/>
+                    android:textColor="@color/text_primary"
+                    app:strokeColor="@color/card_stroke"
+                    app:cornerRadius="12dp"/>
                     
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnUrgenciaAlta"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:text="🔴 Alta"
-                    android:alpha="0.5"/>
+                    android:textColor="@color/text_primary"
+                    app:strokeColor="@color/card_stroke"
+                    app:cornerRadius="12dp"/>
             </LinearLayout>
 
             <!-- Photo Picker -->
@@ -226,6 +266,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Evidencia fotográfica"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 

@@ -34,7 +34,7 @@ public class WeatherRepository {
         double lat = 11.2408;
         double lon = -74.199;
         
-        weatherApiService.getWeather(lat, lon, true, "temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code")
+        weatherApiService.getWeather(lat, lon, "temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code")
                 .enqueue(new Callback<WeatherModel>() {
             @Override
             public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {

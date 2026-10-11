@@ -22,11 +22,10 @@
             app:cardBackgroundColor="#FFFFFF">
 
             <ImageView
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_tipo_sin_agua"
-                app:tint="@color/agua_primary" />
+                android:src="@drawable/ic_aguaya_logo" />
         </androidx.cardview.widget.CardView>
 
         <TextView
