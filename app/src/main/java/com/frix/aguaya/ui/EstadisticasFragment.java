@@ -148,6 +148,11 @@ public class EstadisticasFragment extends Fragment {
             colors.add(Color.parseColor("#ef4444"));
         }
 
+        if (entries.isEmpty()) {
+            entries.add(new PieEntry(100f, "Sin datos"));
+            colors.add(Color.parseColor("#94a3b8"));
+        }
+
         PieDataSet dataSet = new PieDataSet(entries, "Estados");
         dataSet.setColors(colors);
         dataSet.setValueTextSize(14f);

@@ -94,6 +94,21 @@ public class ReportCardAdapter extends RecyclerView.Adapter<ReportCardAdapter.Vi
         holder.btnConfirmar.setOnClickListener(v -> {
             if (listener != null) listener.onConfirmarClick(reporte, position);
         });
+
+        if (holder.btnCompartir != null) {
+            holder.btnCompartir.setOnClickListener(v -> {
+                String shareText = "📢 Reporte en AguaYa Santa Marta:\n" +
+                        "📍 Barrio: " + (reporte.getBarrio() != null ? reporte.getBarrio() : "") + "\n" +
+                        "⚠️ Problema: " + (reporte.getTipo() != null ? reporte.getTipo() : "") + "\n" +
+                        "📝 " + (reporte.getDescripcion() != null ? reporte.getDescripcion() : "") + "\n\n" +
+                        "¡Unidos por un mejor servicio de agua en Santa Marta!";
+                android.content.Intent sendIntent = new android.content.Intent(android.content.Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+                sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Reporte AguaYa - " + reporte.getBarrio());
+                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+                context.startActivity(android.content.Intent.createChooser(sendIntent, "Compartir reporte con"));
+            });
+        }
     }
 
     @Override
@@ -137,7 +152,7 @@ public class ReportCardAdapter extends RecyclerView.Adapter<ReportCardAdapter.Vi
         TextView txtBarrio, txtDescripcion, txtTiempo, txtTipo, txtEstado, txtConfirmaciones;
         ImageView imgFoto, icTipo;
         LinearLayout llTipoBadge, llEstadoBadge;
-        View btnConfirmar;
+        View btnConfirmar, btnCompartir;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,6 +163,7 @@ public class ReportCardAdapter extends RecyclerView.Adapter<ReportCardAdapter.Vi
             txtEstado = itemView.findViewById(R.id.txtEstado);
             txtConfirmaciones = itemView.findViewById(R.id.txtConfirmaciones);
             imgFoto = itemView.findViewById(R.id.imgFoto);
+            btnCompartir = itemView.findViewById(R.id.btnCompartir);
             icTipo = itemView.findViewById(R.id.icTipo);
             llTipoBadge = itemView.findViewById(R.id.llTipoBadge);
             llEstadoBadge = itemView.findViewById(R.id.llEstadoBadge);

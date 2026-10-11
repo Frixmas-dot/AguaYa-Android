@@ -36,6 +36,8 @@ public class EstadisticasModel {
 
     public static class TipoCount {
         private String tipo;
+
+        @SerializedName(value = "cantidad", alternate = {"count"})
         private int cantidad;
 
         public String getTipo() { return tipo; }
@@ -46,8 +48,13 @@ public class EstadisticasModel {
     }
 
     public static class BarrioCount {
+        @SerializedName(value = "barrio", alternate = {"nombre"})
         private String barrio;
+
+        @SerializedName(value = "cantidad", alternate = {"reportes"})
         private int cantidad;
+
+        @SerializedName(value = "tipoPrincipal", alternate = {"problema"})
         private String tipoPrincipal;
 
         public String getBarrio() { return barrio; }

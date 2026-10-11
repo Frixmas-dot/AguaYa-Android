@@ -36,6 +36,10 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         
         setupClickListeners(view);
+        
+        binding.swipeRefreshHome.setColorSchemeResources(R.color.agua_primary);
+        binding.swipeRefreshHome.setOnRefreshListener(() -> viewModel.cargarEstadisticas());
+
         observeViewModel();
         
         viewModel.cargarEstadisticas();
@@ -80,7 +84,9 @@ public class HomeFragment extends Fragment {
 
     private void observeViewModel() {
         viewModel.getCargando().observe(getViewLifecycleOwner(), cargando -> {
-            binding.progressHome.setVisibility(cargando ? View.VISIBLE : View.GONE);
+            boolean isLoading = cargando != null && cargando;
+            binding.swipeRefreshHome.setRefreshing(isLoading);
+            binding.progressHome.setVisibility(isLoading && !binding.swipeRefreshHome.isRefreshing() ? View.VISIBLE : View.GONE);
         });
 
         viewModel.getEstadisticas().observe(getViewLifecycleOwner(), stats -> {

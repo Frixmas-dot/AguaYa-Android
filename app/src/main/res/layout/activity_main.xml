@@ -17,13 +17,21 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/card_stroke" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_nav_height"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:background="@color/agua_surface"
-        app:itemIconTint="@color/agua_primary"
-        app:itemTextColor="@color/agua_primary"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
+        app:itemRippleColor="@color/nav_indicator_color"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:elevation="8dp" />

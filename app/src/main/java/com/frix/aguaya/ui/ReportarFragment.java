@@ -57,7 +57,33 @@ public class ReportarFragment extends Fragment {
         observeViewModel();
     }
 
+    private static final String[] BARRIOS_SANTA_MARTA = {
+        "17 de Diciembre", "20 de Julio", "Alcudia", "Bavaria",
+        "Bello Horizonte", "Bolivariana", "Bonda", "Boulevard de las Rosas",
+        "Cantilito", "Centro Histórico", "Chimila", "Ciudad Equidad",
+        "Cristo Rey", "El Cundí", "El Mayor", "El Parque", "El Pradito",
+        "El Rodadero", "Gaira", "Garagoa", "Jardín", "La Concepción",
+        "La Esperanza", "La Paz", "Las Américas", "Los Almendros",
+        "Los Ángeles", "Los Olivos", "Mamatoco", "Manzanares", "María Eugenia",
+        "Minuto de Dios", "Nacho Vives", "Obrero", "Once de Noviembre",
+        "Pastrana", "Pescaíto", "Playa Salguero", "Pozos Colorados",
+        "San Fernando", "San Francisco", "San Jorge", "San Martín", "San Pablo",
+        "Santa Ana", "Santa Cruz", "Santa Fe", "Taganga", "Taminaca",
+        "Timayui", "Urbanización Riascos", "Villa Bella", "Villa Concha",
+        "Villa del Carmen", "Villa del Río", "Vista Hermosa"
+    };
+
+    private void setupBarrioAutocomplete() {
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            BARRIOS_SANTA_MARTA
+        );
+        binding.etBarrio.setAdapter(adapter);
+    }
+
     private void setupListeners() {
+        setupBarrioAutocomplete();
         // Tipo Selectors
         binding.cardTipoSinAgua.setOnClickListener(v -> seleccionarTipo("Sin agua"));
         binding.cardTipoBajaPresion.setOnClickListener(v -> seleccionarTipo("Baja presión"));
