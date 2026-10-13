@@ -8,13 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.frix.aguaya.R;
 import com.frix.aguaya.databinding.FragmentReportarBinding;
@@ -55,6 +58,24 @@ public class ReportarFragment extends Fragment {
 
         setupListeners();
         observeViewModel();
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (binding != null && binding.successOverlay.getVisibility() == View.VISIBLE) {
+                    binding.successOverlay.setVisibility(View.GONE);
+                    resetForm();
+                    viewModel.resetFormulario();
+                    BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+                    if (bottomNav != null) {
+                        bottomNav.setSelectedItemId(R.id.homeFragment);
+                    }
+                } else {
+                    setEnabled(false);
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
     }
 
     private static final String[] BARRIOS_SANTA_MARTA = {
@@ -155,8 +176,8 @@ public class ReportarFragment extends Fragment {
 
         // Highlight selected
         if ("Sin agua".equals(tipo)) {
-            binding.cardTipoSinAgua.setStrokeColor(android.graphics.Color.parseColor("#EF4444"));
-            binding.cardTipoSinAgua.setCardBackgroundColor(android.graphics.Color.parseColor("#FEF2F2"));
+            binding.cardTipoSinAgua.setStrokeColor(android.graphics.Color.parseColor("#0EA5E9"));
+            binding.cardTipoSinAgua.setCardBackgroundColor(android.graphics.Color.parseColor("#F0F9FF"));
             binding.cardTipoSinAgua.setStrokeWidth(dpToPx(2));
             binding.cardTipoSinAgua.setCardElevation(dpToPx(4));
         } else if ("Baja presión".equals(tipo)) {
@@ -170,8 +191,8 @@ public class ReportarFragment extends Fragment {
             binding.cardTipoAguaSucia.setStrokeWidth(dpToPx(2));
             binding.cardTipoAguaSucia.setCardElevation(dpToPx(4));
         } else if ("Fuga".equals(tipo)) {
-            binding.cardTipoFuga.setStrokeColor(android.graphics.Color.parseColor("#0EA5E9"));
-            binding.cardTipoFuga.setCardBackgroundColor(android.graphics.Color.parseColor("#F0F9FF"));
+            binding.cardTipoFuga.setStrokeColor(android.graphics.Color.parseColor("#EF4444"));
+            binding.cardTipoFuga.setCardBackgroundColor(android.graphics.Color.parseColor("#FEF2F2"));
             binding.cardTipoFuga.setStrokeWidth(dpToPx(2));
             binding.cardTipoFuga.setCardElevation(dpToPx(4));
         }
@@ -286,13 +307,26 @@ public class ReportarFragment extends Fragment {
     private void mostrarExito() {
         binding.successOverlay.setVisibility(View.VISIBLE);
         
-        binding.btnVerMapa.setOnClickListener(v -> 
-            Navigation.findNavController(requireView()).navigate(R.id.mapaFragment)
-        );
+        binding.btnVerMapa.setOnClickListener(v -> {
+            binding.successOverlay.setVisibility(View.GONE);
+            resetForm();
+            viewModel.resetFormulario();
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.mapaFragment);
+            } else {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.homeFragment, false)
+                        .build();
+                Navigation.findNavController(requireView()).navigate(R.id.mapaFragment, null, navOptions);
+            }
+        });
         
         binding.btnHacerOtro.setOnClickListener(v -> {
             binding.successOverlay.setVisibility(View.GONE);
             resetForm();
+            viewModel.resetFormulario();
         });
     }
 

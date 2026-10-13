@@ -66,10 +66,10 @@ public class BarrioStatsAdapter extends RecyclerView.Adapter<BarrioStatsAdapter.
     private int getTipoColor(String tipo) {
         if (tipo == null) return Color.parseColor("#0c4a6e");
         switch (tipo) {
-            case "Sin agua": return Color.parseColor("#ef4444");
+            case "Sin agua": return Color.parseColor("#0ea5e9");
             case "Baja presión": return Color.parseColor("#f97316");
             case "Agua sucia": return Color.parseColor("#a16207");
-            case "Fuga": return Color.parseColor("#0ea5e9");
+            case "Fuga": return Color.parseColor("#ef4444");
             default: return Color.parseColor("#0c4a6e");
         }
     }

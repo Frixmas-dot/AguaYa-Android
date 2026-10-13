@@ -109,10 +109,10 @@ public class EstadisticasFragment extends Fragment {
             
             int color;
             switch (stat.getTipo() != null ? stat.getTipo() : "") {
-                case "Sin agua": color = Color.parseColor("#ef4444"); break;
+                case "Sin agua": color = Color.parseColor("#0ea5e9"); break;
                 case "Baja presión": color = Color.parseColor("#f97316"); break;
                 case "Agua sucia": color = Color.parseColor("#a16207"); break;
-                case "Fuga": color = Color.parseColor("#0ea5e9"); break;
+                case "Fuga": color = Color.parseColor("#ef4444"); break;
                 default: color = Color.parseColor("#0c4a6e"); break;
             }
             colors.add(color);

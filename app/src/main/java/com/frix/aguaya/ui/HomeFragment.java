@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.frix.aguaya.R;
 import com.frix.aguaya.databinding.FragmentHomeBinding;
@@ -61,7 +63,11 @@ public class HomeFragment extends Fragment {
             
             Bundle bundle = new Bundle();
             bundle.putString("tipo_preseleccionado", tipo);
-            Navigation.findNavController(view).navigate(R.id.reportarFragment, bundle);
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.homeFragment, false)
+                    .build();
+            Navigation.findNavController(view).navigate(R.id.reportarFragment, bundle, navOptions);
         };
 
         binding.cardSinAgua.setOnClickListener(cardClickListener);
@@ -69,17 +75,44 @@ public class HomeFragment extends Fragment {
         binding.cardAguaSucia.setOnClickListener(cardClickListener);
         binding.cardFuga.setOnClickListener(cardClickListener);
 
-        binding.btnHacerReporte.setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.reportarFragment)
-        );
+        binding.btnHacerReporte.setOnClickListener(v -> {
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.reportarFragment);
+            } else {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.homeFragment, false)
+                        .build();
+                Navigation.findNavController(v).navigate(R.id.reportarFragment, null, navOptions);
+            }
+        });
 
-        binding.btnVerMapa.setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.mapaFragment)
-        );
+        binding.btnVerMapa.setOnClickListener(v -> {
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.mapaFragment);
+            } else {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.homeFragment, false)
+                        .build();
+                Navigation.findNavController(v).navigate(R.id.mapaFragment, null, navOptions);
+            }
+        });
         
-        binding.btnBottomHacerReporte.setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.reportarFragment)
-        );
+        binding.btnBottomHacerReporte.setOnClickListener(v -> {
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.reportarFragment);
+            } else {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.homeFragment, false)
+                        .build();
+                Navigation.findNavController(v).navigate(R.id.reportarFragment, null, navOptions);
+            }
+        });
     }
 
     private void observeViewModel() {

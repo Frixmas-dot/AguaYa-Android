@@ -7,10 +7,10 @@
     <color name="agua_accent">#0ea5e9</color>
     <color name="agua_background">#f0f9ff</color>
     <color name="agua_surface">#FFFFFF</color>
-    <color name="tipo_sin_agua">#ef4444</color>
+    <color name="tipo_sin_agua">#0ea5e9</color>
     <color name="tipo_baja_presion">#f97316</color>
     <color name="tipo_agua_sucia">#a16207</color>
-    <color name="tipo_fuga">#0ea5e9</color>
+    <color name="tipo_fuga">#ef4444</color>
     <color name="estado_pendiente">#ef4444</color>
     <color name="estado_en_proceso">#f97316</color>
     <color name="estado_resuelto">#22c55e</color>

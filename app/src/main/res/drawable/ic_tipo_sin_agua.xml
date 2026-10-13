@@ -3,9 +3,9 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <!-- Water Drop in Vibrant Red -->
+    <!-- Water Drop in Vibrant Sky Blue -->
     <path
-        android:fillColor="#EF4444"
+        android:fillColor="#0EA5E9"
         android:pathData="M12,2C8.5,5.8 5,9.8 5,14c0,4.4 3.1,7.5 7,7.5s7,-3.1 7,-7.5c0,-4.2 -3.5,-8.2 -7,-12z" />
     <!-- Crisp White X in center indicating no water -->
     <path
