@@ -97,16 +97,7 @@ public class ReportCardAdapter extends RecyclerView.Adapter<ReportCardAdapter.Vi
 
         if (holder.btnCompartir != null) {
             holder.btnCompartir.setOnClickListener(v -> {
-                String shareText = "📢 Reporte en AguaYa Santa Marta:\n" +
-                        "📍 Barrio: " + (reporte.getBarrio() != null ? reporte.getBarrio() : "") + "\n" +
-                        "⚠️ Problema: " + (reporte.getTipo() != null ? reporte.getTipo() : "") + "\n" +
-                        "📝 " + (reporte.getDescripcion() != null ? reporte.getDescripcion() : "") + "\n\n" +
-                        "¡Unidos por un mejor servicio de agua en Santa Marta!";
-                android.content.Intent sendIntent = new android.content.Intent(android.content.Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
-                sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Reporte AguaYa - " + reporte.getBarrio());
-                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-                context.startActivity(android.content.Intent.createChooser(sendIntent, "Compartir reporte con"));
+                com.frix.aguaya.utils.ShareHelper.compartirReporte(context, reporte);
             });
         }
     }

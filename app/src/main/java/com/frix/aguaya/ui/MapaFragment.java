@@ -68,12 +68,18 @@ public class MapaFragment extends Fragment {
         adapter = new ReportCardAdapter(requireContext(), new ReportCardAdapter.OnReportClickListener() {
             @Override
             public void onReportClick(ReportModel reporte) {
-                // Not needed for map
+                mostrarDetalleReporte(reporte);
             }
 
             @Override
-            public void onConfirmarClick(ReportModel reporte, int id) {
-                // Handle confirm action if supported in this view
+            public void onConfirmarClick(ReportModel reporte, int position) {
+                new com.frix.aguaya.repositories.ReporteRepository().confirmarReporte(reporte.getId())
+                        .observe(getViewLifecycleOwner(), success -> {
+                            if (Boolean.TRUE.equals(success)) {
+                                reporte.setConfirmaciones(reporte.getConfirmaciones() + 1);
+                                adapter.notifyItemChanged(position);
+                            }
+                        });
             }
         });
         
@@ -81,13 +87,30 @@ public class MapaFragment extends Fragment {
         binding.rvReportesMapa.setAdapter(adapter);
 
         BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(binding.bottomSheet);
+        binding.btnCarrotanquesMapa.setOnClickListener(v -> {
+            RutasCarrotanquesDialog.newInstance().show(getChildFragmentManager(), "RutasCarrotanques");
+        });
         behavior.setPeekHeight(600);
     }
+
+    private boolean modoSemaforoActivo = false;
 
     private void setupFilters() {
         binding.chipGroupFiltros.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (checkedIds.isEmpty()) return;
             int checkedId = checkedIds.get(0);
+
+            if (checkedId == R.id.chipSemaforo) {
+                modoSemaforoActivo = true;
+                viewModel.setFiltro(null);
+                List<ReportModel> current = viewModel.getReportes().getValue();
+                if (current != null) {
+                    renderizarSemaforo(current);
+                }
+                return;
+            }
+
+            modoSemaforoActivo = false;
             String filtro = null;
             if (checkedId == R.id.chipSinAgua) filtro = "Sin agua";
             else if (checkedId == R.id.chipBajaPresion) filtro = "Baja presión";
@@ -103,7 +126,13 @@ public class MapaFragment extends Fragment {
             if (reportes != null) {
                 binding.tvReportCount.setText(String.valueOf(reportes.size()));
                 adapter.setReportes(reportes);
-                updateMapMarkers(reportes);
+                if (modoSemaforoActivo) {
+                    renderizarSemaforo(reportes);
+                } else {
+                    updateMapMarkers(reportes);
+                }
+                boolean offline = com.frix.aguaya.utils.OfflineCacheManager.isOfflineFallbackActive();
+                binding.bannerModoOffline.setVisibility(offline ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -126,13 +155,112 @@ public class MapaFragment extends Fragment {
     private void updateMapMarkers(List<ReportModel> reportes) {
         binding.mapView.getOverlays().clear();
         for (ReportModel reporte : reportes) {
+            if (reporte.getLat() == 0.0 && reporte.getLng() == 0.0) continue;
             Marker marker = new Marker(binding.mapView);
             marker.setPosition(new GeoPoint(reporte.getLat(), reporte.getLng()));
             marker.setTitle(reporte.getBarrio());
             marker.setSnippet(reporte.getTipo() + " - " + reporte.getDescripcion());
             marker.setIcon(createMarkerIcon(reporte.getTipo()));
+            marker.setOnMarkerClickListener((m, mapView) -> {
+                mostrarDetalleReporte(reporte);
+                return true;
+            });
             binding.mapView.getOverlays().add(marker);
         }
+        binding.mapView.invalidate();
+    }
+
+    private void mostrarDetalleReporte(ReportModel reporte) {
+        if (reporte == null || !isAdded()) return;
+        ReportDetailBottomSheet sheet = ReportDetailBottomSheet.newInstance(reporte);
+        sheet.setOnReportUpdatedListener(updatedReport -> {
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        sheet.show(getChildFragmentManager(), "ReportDetailBottomSheet");
+    }
+
+    private void renderizarSemaforo(List<ReportModel> reportes) {
+        binding.mapView.getOverlays().clear();
+        if (reportes == null || reportes.isEmpty()) {
+            binding.mapView.invalidate();
+            return;
+        }
+
+        // Agrupar por barrio para contar incidencias y calcular centroide
+        java.util.Map<String, List<ReportModel>> porBarrio = new java.util.HashMap<>();
+        for (ReportModel r : reportes) {
+            String barrio = r.getBarrio() != null ? r.getBarrio() : "Desconocido";
+            if (!porBarrio.containsKey(barrio)) {
+                porBarrio.put(barrio, new java.util.ArrayList<>());
+            }
+            porBarrio.get(barrio).add(r);
+        }
+
+        for (java.util.Map.Entry<String, List<ReportModel>> entry : porBarrio.entrySet()) {
+            String barrio = entry.getKey();
+            List<ReportModel> lista = entry.getValue();
+            int count = lista.size();
+
+            double sumLat = 0, sumLng = 0;
+            int validCoords = 0;
+            for (ReportModel r : lista) {
+                if (r.getLat() != 0.0 && r.getLng() != 0.0) {
+                    sumLat += r.getLat();
+                    sumLng += r.getLng();
+                    validCoords++;
+                }
+            }
+
+            if (validCoords == 0) continue;
+            double centerLat = sumLat / validCoords;
+            double centerLng = sumLng / validCoords;
+            GeoPoint centerPoint = new GeoPoint(centerLat, centerLng);
+
+            int fillColor;
+            int strokeColor;
+            String nivelAlerta;
+            double radiusMeters;
+
+            if (count >= 3) {
+                fillColor = Color.argb(65, 239, 68, 68);
+                strokeColor = Color.parseColor("#EF4444");
+                nivelAlerta = "🚨 ALERTA ROJA (Zona Crítica)";
+                radiusMeters = 850.0;
+            } else if (count == 2) {
+                fillColor = Color.argb(65, 249, 115, 22);
+                strokeColor = Color.parseColor("#F97316");
+                nivelAlerta = "⚠️ ALERTA NARANJA (Moderada)";
+                radiusMeters = 650.0;
+            } else {
+                fillColor = Color.argb(45, 14, 165, 233);
+                strokeColor = Color.parseColor("#0EA5E9");
+                nivelAlerta = "🟢 ALERTA LEVE (Seguimiento)";
+                radiusMeters = 450.0;
+            }
+
+            org.osmdroid.views.overlay.Polygon circle = new org.osmdroid.views.overlay.Polygon(binding.mapView);
+            circle.setPoints(org.osmdroid.views.overlay.Polygon.pointsAsCircle(centerPoint, radiusMeters));
+            circle.setFillColor(fillColor);
+            circle.setStrokeColor(strokeColor);
+            circle.setStrokeWidth(3.5f);
+            circle.setTitle(nivelAlerta + ": " + barrio);
+            circle.setSnippet(count + " reportes acumulados");
+            binding.mapView.getOverlays().add(circle);
+
+            Marker marker = new Marker(binding.mapView);
+            marker.setPosition(centerPoint);
+            marker.setTitle(nivelAlerta);
+            marker.setSnippet(barrio + " — " + count + " incidencias registradas");
+            marker.setIcon(createMarkerIcon(count >= 3 ? "Fuga" : (count == 2 ? "Baja presión" : "Sin agua")));
+            marker.setOnMarkerClickListener((m, mapView) -> {
+                mostrarDetalleReporte(lista.get(0));
+                return true;
+            });
+            binding.mapView.getOverlays().add(marker);
+        }
+
         binding.mapView.invalidate();
     }
 

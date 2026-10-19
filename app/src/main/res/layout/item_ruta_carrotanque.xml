@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Fila superior: Barrio/Sector y Badge Estado -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/llEstadoRutaBadge"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvRutaBarrio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/agua_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Bastidas — Manzanas 12 a 16" />
+
+                <TextView
+                    android:id="@+id/tvRutaVehiculo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    tools:text="Carrotanque Cisterna Essmar Móvil #04" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEstadoRutaBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_badge"
+                android:backgroundTint="@color/estado_resuelto"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:id="@+id/tvEstadoRuta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="En camino" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Divisor sutil -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/card_stroke" />
+
+        <!-- Detalles de ruta: Horario y Capacidad -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvRutaHorario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                tools:text="⏰ 08:30 AM – 11:30 AM" />
+
+            <TextView
+                android:id="@+id/tvRutaCapacidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/agua_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="💧 12.000 L" />
+        </LinearLayout>
+
+        <!-- Punto de distribución -->
+        <TextView
+            android:id="@+id/tvRutaPunto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            tools:text="📍 Punto: Frente a la cancha comunitaria del sector" />
+
+        <!-- Observaciones -->
+        <TextView
+            android:id="@+id/tvRutaObservaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#475569"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            tools:text="ℹ️ Prioridad: Familias con adultos mayores y colegios." />
+
+        <!-- Botón de Compartir a Vecinos -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCompartirRuta"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:text="Avisar a vecinos (WhatsApp)"
+            android:textAllCaps="false"
+            android:textColor="@color/agua_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="#e0f2fe"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_share"
+            app:iconGravity="textStart"
+            app:iconTint="@color/agua_primary" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

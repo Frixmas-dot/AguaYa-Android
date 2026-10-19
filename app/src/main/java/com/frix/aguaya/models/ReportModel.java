@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ReportModel {
+import java.io.Serializable;
+
+public class ReportModel implements Serializable {
     private int id;
     private String barrio;
     private String tipo;
@@ -84,6 +86,20 @@ public class ReportModel {
             return "Hace " + days + "d";
         } catch (ParseException e) {
             e.printStackTrace();
+            return createdAt;
+        }
+    }
+
+    public String getFechaFormateada() {
+        if (createdAt == null || createdAt.isEmpty()) return "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+            sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+            Date date = sdf.parse(createdAt);
+            if (date == null) return createdAt;
+            SimpleDateFormat out = new SimpleDateFormat("d 'de' MMMM, yyyy - hh:mm a", new Locale("es", "CO"));
+            return out.format(date);
+        } catch (Exception e) {
             return createdAt;
         }
     }

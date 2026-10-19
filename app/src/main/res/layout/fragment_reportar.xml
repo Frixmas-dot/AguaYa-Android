@@ -144,6 +144,77 @@
                 </com.google.android.material.card.MaterialCardView>
             </GridLayout>
 
+            <!-- GPS Location Card/Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGpsLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/agua_accent"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:id="@+id/btnUsarUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:id="@+id/ivGpsIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_location"
+                        app:tint="@color/agua_accent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvGpsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📍 Usar mi ubicación actual (GPS)"
+                            android:textColor="@color/agua_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvGpsSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Toca para autocompletar barrio y coordenadas"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressGps"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/ivGpsCheck"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_check_circle"
+                        app:tint="@color/estado_resuelto"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Fields -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilBarrio"

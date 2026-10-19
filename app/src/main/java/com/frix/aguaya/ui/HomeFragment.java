@@ -113,6 +113,10 @@ public class HomeFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.reportarFragment, null, navOptions);
             }
         });
+
+        binding.cardCarrotanquesHome.setOnClickListener(v -> {
+            RutasCarrotanquesDialog.newInstance().show(getChildFragmentManager(), "RutasCarrotanques");
+        });
     }
 
     private void observeViewModel() {

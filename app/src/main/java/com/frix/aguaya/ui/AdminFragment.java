@@ -87,6 +87,11 @@ public class AdminFragment extends Fragment {
             viewModel.filtroEstado.setValue(filtro);
             viewModel.cargarReportes();
         });
+
+        binding.btnExportarPdf.setOnClickListener(v -> {
+            com.frix.aguaya.models.EstadisticasModel stats = com.frix.aguaya.utils.OfflineCacheManager.getEstadisticas(requireContext());
+            com.frix.aguaya.utils.PdfReportHelper.exportarInformePdf(requireContext(), viewModel.getReportes().getValue(), stats);
+        });
     }
 
     private void setupObservers() {

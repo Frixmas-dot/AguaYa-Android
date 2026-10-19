@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp">
+
+        <!-- Barra de arrastre (Drag handle) -->
+        <View
+            android:layout_width="44dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_badge"
+            android:backgroundTint="#cbd5e1" />
+
+        <!-- Encabezado con Barrio y Botón Cerrar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/btnCerrarDetalle"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDetalleBarrio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/agua_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Barrio El Rodadero" />
+
+                <TextView
+                    android:id="@+id/tvDetalleCiudad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="🌊 Santa Marta, Colombia"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnCerrarDetalle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Cerrar detalle"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/text_secondary" />
+        </RelativeLayout>
+
+        <!-- Fila de Badges (Tipo, Urgencia, Estado) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Badge Tipo -->
+                <LinearLayout
+                    android:id="@+id/llDetalleTipoBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_badge"
+                    android:backgroundTint="@color/agua_primary"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp">
+
+                    <ImageView
+                        android:id="@+id/ivDetalleTipo"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_tipo_sin_agua"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:id="@+id/tvDetalleTipo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="Sin agua" />
+                </LinearLayout>
+
+                <!-- Badge Urgencia -->
+                <LinearLayout
+                    android:id="@+id/llDetalleUrgenciaBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_badge"
+                    android:backgroundTint="@color/urgencia_media"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp">
+
+                    <TextView
+                        android:id="@+id/tvDetalleUrgencia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="Urgencia Media" />
+                </LinearLayout>
+
+                <!-- Badge Estado -->
+                <LinearLayout
+                    android:id="@+id/llDetalleEstadoBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge"
+                    android:backgroundTint="@color/estado_pendiente"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp">
+
+                    <TextView
+                        android:id="@+id/tvDetalleEstado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="Pendiente" />
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Información de tiempo y fecha -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDetalleTiempoRelativo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/agua_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="Hace 2h" />
+
+            <TextView
+                android:id="@+id/tvDetalleSeparadorFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" • "
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvDetalleFechaExacta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                tools:text="19 de octubre, 2026 - 10:30 am" />
+        </LinearLayout>
+
+        <!-- Coordenadas GPS (si disponibles) -->
+        <LinearLayout
+            android:id="@+id/llDetalleCoordenadas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_location"
+                app:tint="@color/text_secondary" />
+
+            <TextView
+                android:id="@+id/tvDetalleCoordenadas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                tools:text="GPS: 11.2408° N, -74.1990° O" />
+        </LinearLayout>
+
+        <!-- Línea divisoria suave -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="14dp"
+            android:background="@color/card_stroke" />
+
+        <!-- Sección de Descripción -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción de la situación"
+            android:textColor="@color/agua_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetalleDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:lineSpacingExtra="3dp"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            tools:text="Llevamos más de tres días consecutivos sin recibir una sola gota de agua en la manzana B. Hemos llamado al operador pero aún no envían carrotanques de apoyo." />
+
+        <!-- Vista previa de Foto (si existe) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDetalleFoto"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_marginTop="14dp"
+            android:visibility="gone"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/ivDetalleFoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Foto del reporte" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tarjeta informativa de apoyo comunitario -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card_rounded"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_thumb_up"
+                app:tint="@color/agua_accent" />
+
+            <TextView
+                android:id="@+id/tvDetalleApoyoComunitario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                tools:text="3 vecinos han confirmado este problema" />
+        </LinearLayout>
+
+        <!-- Botones de Acción (Confirmar y Compartir WhatsApp) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <!-- Botón Confirmar (+1) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirmarDetalle"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Apoyar (+1)"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/agua_accent"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_thumb_up"
+                app:iconGravity="textStart"
+                app:iconTint="#FFFFFF" />
+
+            <!-- Botón Compartir (WhatsApp / Redes) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCompartirDetalle"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Compartir"
+                android:textAllCaps="false"
+                android:textColor="@color/agua_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:backgroundTint="#e0f2fe"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_share"
+                app:iconGravity="textStart"
+                app:iconTint="@color/agua_primary" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

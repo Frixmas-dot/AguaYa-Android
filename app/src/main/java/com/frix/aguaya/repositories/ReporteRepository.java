@@ -44,10 +44,14 @@ public class ReporteRepository {
             @Override
             public void onResponse(Call<List<ReportModel>> call, Response<List<ReportModel>> response) {
                 cargando.setValue(false);
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    com.frix.aguaya.utils.OfflineCacheManager.saveReportes(null, response.body());
+                    com.frix.aguaya.utils.OfflineCacheManager.setOfflineFallbackActive(false);
                     data.setValue(response.body());
                 } else {
-                    error.setValue("Error al obtener reportes");
+                    com.frix.aguaya.utils.OfflineCacheManager.setOfflineFallbackActive(true);
+                    List<ReportModel> cached = com.frix.aguaya.utils.OfflineCacheManager.getReportes(null);
+                    data.setValue(cached);
                 }
             }
 
@@ -55,12 +59,19 @@ public class ReporteRepository {
             public void onFailure(Call<List<ReportModel>> call, Throwable t) {
                 cargando.setValue(false);
                 error.setValue(t.getMessage());
+                com.frix.aguaya.utils.OfflineCacheManager.setOfflineFallbackActive(true);
+                List<ReportModel> cached = com.frix.aguaya.utils.OfflineCacheManager.getReportes(null);
+                data.setValue(cached);
             }
         });
         return data;
     }
 
     public LiveData<ReportModel> crearReporte(String barrio, String tipoId, String desc, String urgencia, String direccion, Uri foto, ContentResolver contentResolver) {
+        return crearReporte(barrio, tipoId, desc, urgencia, direccion, foto, contentResolver, null, null);
+    }
+
+    public LiveData<ReportModel> crearReporte(String barrio, String tipoId, String desc, String urgencia, String direccion, Uri foto, ContentResolver contentResolver, Double lat, Double lng) {
         MutableLiveData<ReportModel> data = new MutableLiveData<>();
         cargando.setValue(true);
         
@@ -71,6 +82,11 @@ public class ReporteRepository {
                 .addFormDataPart("desc", desc)
                 .addFormDataPart("urgencia", urgencia != null ? urgencia : "media")
                 .addFormDataPart("direccion", direccion != null ? direccion : "");
+
+        if (lat != null && lng != null) {
+            builder.addFormDataPart("lat", String.valueOf(lat));
+            builder.addFormDataPart("lng", String.valueOf(lng));
+        }
         
         if (foto != null && contentResolver != null) {
             try {
@@ -188,15 +204,17 @@ public class ReporteRepository {
             public void onResponse(Call<EstadisticasModel> call, Response<EstadisticasModel> response) {
                 cargando.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
+                    com.frix.aguaya.utils.OfflineCacheManager.saveEstadisticas(null, response.body());
                     data.setValue(response.body());
                 } else {
-                    error.setValue("Error al obtener estadísticas");
+                    data.setValue(com.frix.aguaya.utils.OfflineCacheManager.getEstadisticas(null));
                 }
             }
             @Override
             public void onFailure(Call<EstadisticasModel> call, Throwable t) {
                 cargando.setValue(false);
                 error.setValue(t.getMessage());
+                data.setValue(com.frix.aguaya.utils.OfflineCacheManager.getEstadisticas(null));
             }
         });
         return data;

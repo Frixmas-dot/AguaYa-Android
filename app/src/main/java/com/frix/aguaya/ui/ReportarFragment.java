@@ -37,6 +37,17 @@ public class ReportarFragment extends Fragment {
             }
         });
 
+    private final ActivityResultLauncher<String[]> requestLocationPermission =
+        registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            Boolean fineLocation = result.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false);
+            Boolean coarseLocation = result.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false);
+            if ((fineLocation != null && fineLocation) || (coarseLocation != null && coarseLocation)) {
+                obtenerUbicacionActual();
+            } else {
+                Snackbar.make(binding.getRoot(), "Permiso de ubicación denegado", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -105,6 +116,10 @@ public class ReportarFragment extends Fragment {
 
     private void setupListeners() {
         setupBarrioAutocomplete();
+
+        // GPS Listener
+        binding.btnUsarUbicacion.setOnClickListener(v -> iniciarCapturaUbicacion());
+
         // Tipo Selectors
         binding.cardTipoSinAgua.setOnClickListener(v -> seleccionarTipo("Sin agua"));
         binding.cardTipoBajaPresion.setOnClickListener(v -> seleccionarTipo("Baja presión"));
@@ -335,10 +350,173 @@ public class ReportarFragment extends Fragment {
         binding.etDireccion.setText("");
         binding.etDescripcion.setText("");
         viewModel.fotoUri.setValue(null);
+        viewModel.latitud.setValue(null);
+        viewModel.longitud.setValue(null);
         ocultarFotoPreview();
         seleccionarUrgencia("media");
-        // Deseleccionar tipo
         seleccionarTipo(null);
+
+        // Reset GPS UI
+        binding.progressGps.setVisibility(View.GONE);
+        binding.ivGpsCheck.setVisibility(View.GONE);
+        binding.tvGpsTitle.setText("📍 Usar mi ubicación actual (GPS)");
+        binding.tvGpsSubtitle.setText("Toca para autocompletar barrio y coordenadas");
+        binding.cardGpsLocation.setStrokeColor(android.graphics.Color.parseColor("#0EA5E9"));
+    }
+
+    private void iniciarCapturaUbicacion() {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED ||
+            androidx.core.content.ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            obtenerUbicacionActual();
+        } else {
+            requestLocationPermission.launch(new String[]{
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            });
+        }
+    }
+
+    @android.annotation.SuppressLint("MissingPermission")
+    private void obtenerUbicacionActual() {
+        binding.progressGps.setVisibility(View.VISIBLE);
+        binding.ivGpsCheck.setVisibility(View.GONE);
+        binding.tvGpsSubtitle.setText("Detectando señal GPS...");
+
+        android.location.LocationManager locationManager = 
+            (android.location.LocationManager) requireContext().getSystemService(android.content.Context.LOCATION_SERVICE);
+
+        if (locationManager == null) {
+            binding.progressGps.setVisibility(View.GONE);
+            binding.tvGpsSubtitle.setText("Servicio de ubicación no disponible");
+            return;
+        }
+
+        boolean gpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        boolean networkEnabled = locationManager.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER);
+
+        if (!gpsEnabled && !networkEnabled) {
+            binding.progressGps.setVisibility(View.GONE);
+            binding.tvGpsSubtitle.setText("Por favor activa el GPS en los ajustes del celular");
+            Snackbar.make(binding.getRoot(), "Por favor activa el GPS en tu celular", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        android.location.Location bestLocation = null;
+        if (gpsEnabled) {
+            bestLocation = locationManager.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
+        }
+        if (bestLocation == null && networkEnabled) {
+            bestLocation = locationManager.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER);
+        }
+
+        if (bestLocation != null && (System.currentTimeMillis() - bestLocation.getTime()) < 120000) {
+            aplicarUbicacion(bestLocation);
+            return;
+        }
+
+        String provider = networkEnabled ? android.location.LocationManager.NETWORK_PROVIDER : android.location.LocationManager.GPS_PROVIDER;
+        try {
+            locationManager.requestSingleUpdate(provider, new android.location.LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull android.location.Location location) {
+                    if (isAdded()) {
+                        aplicarUbicacion(location);
+                    }
+                }
+                @Override public void onStatusChanged(String provider, int status, Bundle extras) {}
+                @Override public void onProviderEnabled(@NonNull String provider) {}
+                @Override public void onProviderDisabled(@NonNull String provider) {}
+            }, android.os.Looper.getMainLooper());
+        } catch (Exception e) {
+            if (bestLocation != null) {
+                aplicarUbicacion(bestLocation);
+            } else {
+                binding.progressGps.setVisibility(View.GONE);
+                binding.tvGpsSubtitle.setText("No se pudo obtener la posición actual");
+            }
+        }
+    }
+
+    private void aplicarUbicacion(android.location.Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        viewModel.latitud.setValue(lat);
+        viewModel.longitud.setValue(lng);
+
+        binding.progressGps.setVisibility(View.GONE);
+        binding.ivGpsCheck.setVisibility(View.VISIBLE);
+        binding.tvGpsTitle.setText("📍 Ubicación detectada");
+        binding.tvGpsSubtitle.setText(String.format(java.util.Locale.getDefault(), "Lat: %.5f, Lng: %.5f", lat, lng));
+        binding.cardGpsLocation.setStrokeColor(android.graphics.Color.parseColor("#22C55E"));
+
+        sugerirBarrioPorCoordenadas(lat, lng);
+    }
+
+    private static final Object[][] BARRIOS_COORDENADAS = {
+        {"Centro Histórico", 11.2442, -74.2117},
+        {"Pescaíto", 11.2505, -74.2098},
+        {"Mamatoco", 11.2356, -74.1706},
+        {"El Rodadero", 11.2056, -74.2267},
+        {"Gaira", 11.1931, -74.2197},
+        {"Bavaria", 11.2389, -74.2014},
+        {"Taganga", 11.2667, -74.1833},
+        {"Bonda", 11.2333, -74.1167},
+        {"Bello Horizonte", 11.1578, -74.2322},
+        {"Pozos Colorados", 11.1714, -74.2306},
+        {"Ciudad Equidad", 11.2289, -74.1458},
+        {"El Parque", 11.2222, -74.1625},
+        {"Los Almendros", 11.2467, -74.1950},
+        {"Jardín", 11.2333, -74.1917},
+        {"María Eugenia", 11.2250, -74.2083},
+        {"Pastrana", 11.2200, -74.2050},
+        {"San Jorge", 11.2520, -74.1980},
+        {"San Martín", 11.2480, -74.2050},
+        {"Nacho Vives", 11.2560, -74.1920},
+        {"17 de Diciembre", 11.2410, -74.1750},
+        {"20 de Julio", 11.2390, -74.1810},
+        {"Timayui", 11.2310, -74.1350},
+        {"Cantilito", 11.2280, -74.1290},
+        {"Chimila", 11.2580, -74.1880},
+        {"La Paz", 11.1780, -74.2150},
+        {"Cristo Rey", 11.1820, -74.2180},
+        {"Playa Salguero", 11.1980, -74.2290},
+        {"Minuto de Dios", 11.2260, -74.1980},
+        {"Taminaca", 11.2430, -74.2030},
+        {"El Cundí", 11.2410, -74.2060},
+        {"El Mayor", 11.2360, -74.2040},
+        {"San Fernando", 11.2510, -74.1950},
+        {"San Francisco", 11.2490, -74.2000},
+        {"Santa Fe", 11.2340, -74.1800},
+        {"Bolivariana", 11.2320, -74.1850},
+        {"La Concepción", 11.2250, -74.1720},
+        {"Villa del Carmen", 11.2280, -74.1680},
+        {"Villa Bella", 11.2300, -74.1650},
+        {"Garagoa", 11.2270, -74.1500}
+    };
+
+    private void sugerirBarrioPorCoordenadas(double lat, double lng) {
+        String barrioMasCercano = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for (Object[] b : BARRIOS_COORDENADAS) {
+            String nombre = (String) b[0];
+            double bLat = (double) b[1];
+            double bLng = (double) b[2];
+            double dist = Math.hypot(lat - bLat, lng - bLng);
+            if (dist < minDistance) {
+                minDistance = dist;
+                barrioMasCercano = nombre;
+            }
+        }
+
+        if (barrioMasCercano != null && minDistance < 0.08) {
+            String barrioActual = binding.etBarrio.getText() != null ? binding.etBarrio.getText().toString().trim() : "";
+            if (barrioActual.isEmpty()) {
+                binding.etBarrio.setText(barrioMasCercano, false);
+                binding.tilBarrio.setError(null);
+                Snackbar.make(binding.getRoot(), "📍 Barrio autocompletado por GPS: " + barrioMasCercano, Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

@@ -19,16 +19,17 @@ public class RetrofitClient {
     // Para Emulador usa "http://10.0.2.2:3001/"
     // Para Celular Físico usa la IP de tu PC en la red Wi-Fi (ej: "http://192.168.X.X:3001/")
     private static final String BASE_URL = "http://192.168.20.179:3001/";
-    private static final String WEATHER_BASE_URL = "https://api.open-meteo.com/";
+    private static final String WEATHER_BASE_URL = "https://api.open-meteo.c" +
+            "om/";
 
     private static Retrofit retrofit = null;
     private static Retrofit weatherRetrofit = null;
 
     private static OkHttpClient getClient() {
         return new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(6, TimeUnit.SECONDS)
+                .readTimeout(8, TimeUnit.SECONDS)
+                .writeTimeout(8, TimeUnit.SECONDS)
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {

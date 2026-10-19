@@ -20,6 +20,8 @@ public class ReportarViewModel extends AndroidViewModel {
     public final MutableLiveData<String> urgencia = new MutableLiveData<>("media");
     public final MutableLiveData<String> direccion = new MutableLiveData<>("");
     public final MutableLiveData<Uri> fotoUri = new MutableLiveData<>(null);
+    public final MutableLiveData<Double> latitud = new MutableLiveData<>(null);
+    public final MutableLiveData<Double> longitud = new MutableLiveData<>(null);
     
     private final MutableLiveData<ReportModel> reporteCreado = new MutableLiveData<>();
     private final MutableLiveData<String> error = new MutableLiveData<>();
@@ -40,13 +42,15 @@ public class ReportarViewModel extends AndroidViewModel {
         String dir = direccion.getValue();
         String urg = urgencia.getValue();
         Uri foto = fotoUri.getValue();
+        Double lat = latitud.getValue();
+        Double lng = longitud.getValue();
 
         if (bar == null || bar.isEmpty() || tipo == null || tipo.isEmpty() || desc == null || desc.isEmpty()) {
             error.setValue("Por favor complete los campos obligatorios.");
             return;
         }
 
-        LiveData<ReportModel> request = repository.crearReporte(bar, tipo, desc, urg, dir, foto, contentResolver);
+        LiveData<ReportModel> request = repository.crearReporte(bar, tipo, desc, urg, dir, foto, contentResolver, lat, lng);
         if (request != null) {
             request.observeForever(new Observer<ReportModel>() {
                 @Override
@@ -67,6 +71,8 @@ public class ReportarViewModel extends AndroidViewModel {
         urgencia.setValue("media");
         direccion.setValue("");
         fotoUri.setValue(null);
+        latitud.setValue(null);
+        longitud.setValue(null);
         error.setValue(null);
         reporteCreado.setValue(null);
     }

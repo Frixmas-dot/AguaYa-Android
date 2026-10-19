@@ -69,6 +69,13 @@
                     android:layout_height="wrap_content"
                     android:text="Fugas" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSemaforo"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️ Zonas Críticas" />
+
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
@@ -80,6 +87,47 @@
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <!-- Banner indicador de Modo Offline / Respaldo -->
+            <LinearLayout
+                android:id="@+id/bannerModoOffline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="#FEF3C7"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📶 Modo Respaldo Local — Datos de Santa Marta activos"
+                    android:textColor="#92400E"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Botón flotante para consultar Rutas de Carrotanques -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCarrotanquesMapa"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="12dp"
+                android:text="🚛 Carrotanques"
+                android:textAllCaps="false"
+                android:textColor="@color/agua_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:cornerRadius="21dp"
+                app:elevation="4dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp" />
                 
             <ProgressBar
                 android:id="@+id/progressMapa"
