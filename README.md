@@ -98,7 +98,8 @@ node server.js
 ---
 
 ## 👥 Autores
-* **Friedrick**
-* **Jesús Torregroza**
+* **Friedrick Riojas** (Desarrollador Principal)
+* **Jesús Torregrosa**
+* **Mateus Nuñez**
 
 Proyecto desarrollado para el **2do Seguimiento de Proyecto de Software**, Universidad del Magdalena.

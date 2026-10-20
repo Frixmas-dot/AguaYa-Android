@@ -1,6 +1,7 @@
 # ==============================================================================
 # AguaYa - Requerimientos de Dependencias y Entorno del Sistema
 # Proyecto de Software - 2do Seguimiento
+# Autores: Friedrick Riojas (Principal), Jesús Torregrosa, Mateus Nuñez
 # ==============================================================================
 
 # NOTA TÉCNICA:
