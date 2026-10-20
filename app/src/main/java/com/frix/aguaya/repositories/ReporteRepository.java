@@ -1,6 +1,8 @@
 package com.frix.aguaya.repositories;
 
 import android.content.ContentResolver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -90,17 +92,40 @@ public class ReporteRepository {
         
         if (foto != null && contentResolver != null) {
             try {
-                InputStream inputStream = contentResolver.openInputStream(foto);
-                if (inputStream != null) {
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                    int nRead;
-                    byte[] d = new byte[16384];
-                    while ((nRead = inputStream.read(d, 0, d.length)) != -1) {
-                        buffer.write(d, 0, nRead);
+                InputStream is = contentResolver.openInputStream(foto);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (is != null) is.close();
+
+                if (bitmap != null) {
+                    int maxDim = 1280;
+                    int width = bitmap.getWidth();
+                    int height = bitmap.getHeight();
+                    if (width > maxDim || height > maxDim) {
+                        float ratio = Math.min((float) maxDim / width, (float) maxDim / height);
+                        int newWidth = Math.round(ratio * width);
+                        int newHeight = Math.round(ratio * height);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
                     }
-                    byte[] bytes = buffer.toByteArray();
-                    RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), bytes);
-                    builder.addFormDataPart("foto", "imagen.jpg", reqFile);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                    byte[] bytes = baos.toByteArray();
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), bytes);
+                    builder.addFormDataPart("foto", "reporte_" + System.currentTimeMillis() + ".jpg", reqFile);
+                } else {
+                    InputStream rawIs = contentResolver.openInputStream(foto);
+                    if (rawIs != null) {
+                        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                        int nRead;
+                        byte[] d = new byte[16384];
+                        while ((nRead = rawIs.read(d, 0, d.length)) != -1) {
+                            buffer.write(d, 0, nRead);
+                        }
+                        rawIs.close();
+                        byte[] bytes = buffer.toByteArray();
+                        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), bytes);
+                        builder.addFormDataPart("foto", "imagen.jpg", reqFile);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
