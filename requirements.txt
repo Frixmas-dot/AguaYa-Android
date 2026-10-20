@@ -1,0 +1,69 @@
+# ==============================================================================
+# AguaYa - Requerimientos de Dependencias y Entorno del Sistema
+# Proyecto de Software - 2do Seguimiento
+# ==============================================================================
+
+# NOTA TÉCNICA:
+# Este proyecto no utiliza Python (donde se estandariza requirements.txt).
+# El Backend está implementado en Node.js/Express y el Cliente en Android/Java.
+# A continuación se desglosan los requerimientos oficiales de cada componente:
+
+# ------------------------------------------------------------------------------
+# 1. DEPENDENCIAS DEL BACKEND (Node.js / Express API - package.json)
+# ------------------------------------------------------------------------------
+# Framework y Enrutamiento:
+express==4.19.2
+
+# Base de Datos y Persistencia:
+mysql2==3.9.7
+
+# Gestión de Archivos y Subida de Imágenes:
+multer==1.4.5-lts.1
+multer-storage-cloudinary==4.0.0
+cloudinary==2.2.0
+
+# Seguridad y Entorno:
+dotenv==16.4.5
+cors==2.8.5
+
+# Herramientas de Desarrollo:
+nodemon==3.1.3
+
+
+# ------------------------------------------------------------------------------
+# 2. DEPENDENCIAS DEL CLIENTE MÓVIL (Android Native Java - build.gradle)
+# ------------------------------------------------------------------------------
+# Red y Comunicación REST:
+com.squareup.retrofit2:retrofit:3.0.0
+com.squareup.retrofit2:converter-gson:3.0.0
+com.squareup.okhttp3:okhttp:4.12.0
+
+# Cartografía y Mapas (OpenStreetMap):
+org.osmdroid:osmdroid-android:6.1.20
+
+# Gráficas y Analítica:
+com.github.PhilJay:MPAndroidChart:v3.1.0
+
+# Carga de Imágenes:
+com.github.bumptech.glide:glide:4.16.0
+
+# Arquitectura Android Jetpack (MVVM & Navigation):
+androidx.navigation:navigation-fragment:2.9.0
+androidx.navigation:navigation-ui:2.9.0
+androidx.lifecycle:lifecycle-viewmodel:2.9.0
+androidx.lifecycle:lifecycle-livedata:2.9.0
+androidx.swiperefreshlayout:swiperefreshlayout:1.1.0
+
+# Interfaz de Usuario y Diseño:
+com.google.android.material:material:1.14.0
+androidx.appcompat:appcompat:1.8.0
+androidx.constraintlayout:constraintlayout:2.2.2
+
+
+# ------------------------------------------------------------------------------
+# 3. REQUERIMIENTOS DEL ENTORNO DE SERVIDOR (Ubuntu Server 24.04 LTS)
+# ------------------------------------------------------------------------------
+node >= 18.0.0
+npm >= 9.0.0
+mysql-server >= 8.0.0
+openjdk-17-jdk >= 17.0.0
