@@ -51,6 +51,10 @@ public class AdminFragment extends Fragment {
         });
 
         binding.btnLogout.setOnClickListener(v -> viewModel.logout());
+
+        binding.btnConfigServidor.setOnClickListener(v -> {
+            com.frix.aguaya.utils.ServerConfig.showServerConfigDialog(requireContext(), null);
+        });
     }
 
     private void setupAdminPanel() {
@@ -91,6 +95,10 @@ public class AdminFragment extends Fragment {
         binding.btnExportarPdf.setOnClickListener(v -> {
             com.frix.aguaya.models.EstadisticasModel stats = com.frix.aguaya.utils.OfflineCacheManager.getEstadisticas(requireContext());
             com.frix.aguaya.utils.PdfReportHelper.exportarInformePdf(requireContext(), viewModel.getReportes().getValue(), stats);
+        });
+
+        binding.btnConfigServidorAdmin.setOnClickListener(v -> {
+            com.frix.aguaya.utils.ServerConfig.showServerConfigDialog(requireContext(), () -> viewModel.cargarReportes());
         });
     }
 

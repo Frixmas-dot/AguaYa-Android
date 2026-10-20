@@ -75,6 +75,15 @@
                 android:layout_height="wrap_content"
                 android:text="Ingresar"
                 android:backgroundTint="#0c4a6e" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfigServidor"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚙️ Cambiar IP del Servidor"
+                android:textColor="#0c4a6e"
+                android:layout_marginTop="8dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -120,6 +129,16 @@
                 app:iconGravity="textStart"
                 app:iconSize="14dp"
                 app:iconTint="@color/agua_primary" />
+
+            <ImageButton
+                android:id="@+id/btnConfigServidorAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_nav_admin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#FFFFFF"
+                android:contentDescription="Configurar Servidor" />
 
             <ImageButton
                 android:id="@+id/btnLogout"

@@ -114,6 +114,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.btnConfigServidorHome.setOnClickListener(v -> {
+            com.frix.aguaya.utils.ServerConfig.showServerConfigDialog(requireContext(), () -> {
+                viewModel.cargarEstadisticas();
+            });
+        });
+
         binding.cardCarrotanquesHome.setOnClickListener(v -> {
             RutasCarrotanquesDialog.newInstance().show(getChildFragmentManager(), "RutasCarrotanques");
         });

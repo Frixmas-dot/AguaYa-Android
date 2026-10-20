@@ -1,10 +1,14 @@
 package com.frix.aguaya.controllers;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.frix.aguaya.utils.ServerConfig;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,15 +19,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static final String TAG = "RetrofitClient";
-    // URL base de la API backend. Modificar según sea necesario.
-    // Para Emulador usa "http://10.0.2.2:3001/"
-    // IP del Ubuntu Server en VirtualBox (Adaptador Puente)
-    private static final String BASE_URL = "http://192.168.20.229:3001/";
-    private static final String WEATHER_BASE_URL = "https://api.open-meteo.c" +
-            "om/";
+    private static final String WEATHER_BASE_URL = "https://api.open-meteo.com/";
+    private static Context appContext = null;
 
     private static Retrofit retrofit = null;
     private static Retrofit weatherRetrofit = null;
+
+    public static void init(Context context) {
+        if (context != null) {
+            appContext = context.getApplicationContext();
+        }
+    }
 
     private static OkHttpClient getClient() {
         return new OkHttpClient.Builder()
@@ -34,6 +40,22 @@ public class RetrofitClient {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request();
+                        HttpUrl originalUrl = request.url();
+
+                        // Dynamic URL rewriting for backend calls (skip Open-Meteo weather)
+                        if (!originalUrl.host().contains("open-meteo")) {
+                            String serverUrl = ServerConfig.getServerUrl(appContext);
+                            HttpUrl targetBase = HttpUrl.parse(serverUrl);
+                            if (targetBase != null) {
+                                HttpUrl newUrl = originalUrl.newBuilder()
+                                        .scheme(targetBase.scheme())
+                                        .host(targetBase.host())
+                                        .port(targetBase.port())
+                                        .build();
+                                request = request.newBuilder().url(newUrl).build();
+                            }
+                        }
+
                         Log.d(TAG, "=== REQUEST ===");
                         Log.d(TAG, "URL: " + request.url());
                         Log.d(TAG, "Method: " + request.method());
@@ -61,11 +83,13 @@ public class RetrofitClient {
     }
 
     public static ApiService getApi() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(getClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(ServerConfig.DEFAULT_URL)
+                    .client(getClient())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
         return retrofit.create(ApiService.class);
     }
 
