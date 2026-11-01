@@ -190,7 +190,17 @@ app.post('/api/reportes', upload.single('foto'), async (req, res) => {
     if (!META_TIPO[tipo])
       return res.status(400).json({ error: 'Tipo inválido' })
 
-    const { lat, lng } = await geocodificar(barrio)
+    // 1. Si el celular envió coordenadas GPS reales, usarlas prioritariamente
+    let lat = req.body.lat ? parseFloat(req.body.lat) : null
+    let lng = req.body.lng ? parseFloat(req.body.lng) : null
+
+    // 2. Si no hay GPS, geocodificar por el nombre del barrio (BD o OpenStreetMap)
+    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+      const geo = await geocodificar(barrio)
+      lat = geo.lat
+      lng = geo.lng
+    }
+
     const foto_url = req.file?.path || null
 
     const [result] = await pool.query(
