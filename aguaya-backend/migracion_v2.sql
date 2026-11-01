@@ -5,10 +5,30 @@
 
 USE aguaya;
 
--- 1. Agregar columnas para Borrado Lógico (Soft Delete)
-ALTER TABLE reportes 
-  ADD COLUMN IF NOT EXISTS activo TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1: visible/activo, 0: archivado/oculto',
-  ADD COLUMN IF NOT EXISTS deleted_at DATETIME NULL DEFAULT NULL COMMENT 'Fecha y hora en que se archivó';
+-- 1. Agregar columnas para Borrado Lógico (Soft Delete) de forma segura en MySQL
+DROP PROCEDURE IF EXISTS migrar_columnas_reportes;
+
+DELIMITER $$
+CREATE PROCEDURE migrar_columnas_reportes()
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reportes' AND COLUMN_NAME = 'activo'
+  ) THEN
+    ALTER TABLE reportes ADD COLUMN activo TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1: visible/activo, 0: archivado/oculto';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reportes' AND COLUMN_NAME = 'deleted_at'
+  ) THEN
+    ALTER TABLE reportes ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL COMMENT 'Fecha y hora en que se archivó';
+  END IF;
+END$$
+DELIMITER ;
+
+CALL migrar_columnas_reportes();
+DROP PROCEDURE IF EXISTS migrar_columnas_reportes;
 
 -- Actualizar reportes existentes para asegurar que estén activos
 UPDATE reportes SET activo = 1 WHERE activo IS NULL;
