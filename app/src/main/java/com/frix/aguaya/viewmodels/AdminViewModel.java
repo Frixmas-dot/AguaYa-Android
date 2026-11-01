@@ -90,7 +90,23 @@ public class AdminViewModel extends AndroidViewModel {
                 @Override
                 public void onChanged(Boolean success) {
                     if (success != null && success) {
-                        mensaje.setValue("Reporte eliminado");
+                        mensaje.setValue("Reporte archivado");
+                        cargarReportes();
+                    }
+                    request.removeObserver(this);
+                }
+            });
+        }
+    }
+
+    public void restaurarReporte(int id) {
+        LiveData<Boolean> request = repository.restaurarReporte(id);
+        if (request != null) {
+            request.observeForever(new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean success) {
+                    if (success != null && success) {
+                        mensaje.setValue("Reporte restaurado");
                         cargarReportes();
                     }
                     request.removeObserver(this);

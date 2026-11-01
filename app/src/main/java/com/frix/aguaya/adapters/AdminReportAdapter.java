@@ -25,6 +25,7 @@ public class AdminReportAdapter extends RecyclerView.Adapter<AdminReportAdapter.
     public interface OnAdminActionListener {
         void onCambiarEstado(int id, String estado);
         void onEliminar(int id);
+        void onRestaurar(int id);
     }
 
     public AdminReportAdapter(Context context, OnAdminActionListener listener) {
@@ -71,16 +72,26 @@ public class AdminReportAdapter extends RecyclerView.Adapter<AdminReportAdapter.
         holder.txtUrgencia.setText("Urgencia: " + reporte.getUrgencia());
         holder.txtConfirmaciones.setText("Apoyos: " + reporte.getConfirmaciones());
         holder.txtFecha.setText(reporte.getCreatedAt());
-        holder.txtEstado.setText(reporte.getEstado() != null ? reporte.getEstado().toUpperCase() : "");
 
-        holder.txtEstado.setTextColor(getEstadoColor(reporte.getEstado()));
-        holder.txtUrgencia.setTextColor(getUrgenciaColor(reporte.getUrgencia()));
-
-        if ("resuelto".equals(reporte.getEstado())) {
-            holder.itemView.setAlpha(0.6f);
+        if (!reporte.isActivo()) {
+            holder.txtEstado.setText("ARCHIVADO (Oculto)");
+            holder.txtEstado.setTextColor(Color.parseColor("#64748b"));
+            holder.layoutAcciones.setVisibility(View.GONE);
+            holder.btnRestaurar.setVisibility(View.VISIBLE);
+            holder.itemView.setAlpha(0.65f);
         } else {
-            holder.itemView.setAlpha(1.0f);
+            holder.layoutAcciones.setVisibility(View.VISIBLE);
+            holder.btnRestaurar.setVisibility(View.GONE);
+            holder.txtEstado.setText(reporte.getEstado() != null ? reporte.getEstado().toUpperCase() : "");
+            holder.txtEstado.setTextColor(getEstadoColor(reporte.getEstado()));
+            if ("resuelto".equals(reporte.getEstado())) {
+                holder.itemView.setAlpha(0.6f);
+            } else {
+                holder.itemView.setAlpha(1.0f);
+            }
         }
+
+        holder.txtUrgencia.setTextColor(getUrgenciaColor(reporte.getUrgencia()));
 
         if (reporte.getFotoUrl() != null && !reporte.getFotoUrl().isEmpty()) {
             holder.imgFoto.setVisibility(View.VISIBLE);
@@ -103,6 +114,10 @@ public class AdminReportAdapter extends RecyclerView.Adapter<AdminReportAdapter.
         
         holder.btnEliminar.setOnClickListener(v -> {
             if (listener != null) listener.onEliminar(reporte.getId());
+        });
+
+        holder.btnRestaurar.setOnClickListener(v -> {
+            if (listener != null) listener.onRestaurar(reporte.getId());
         });
     }
 
@@ -134,7 +149,8 @@ public class AdminReportAdapter extends RecyclerView.Adapter<AdminReportAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtId, txtBarrio, txtDireccion, txtTipo, txtDescripcion, txtUrgencia, txtConfirmaciones, txtFecha, txtEstado;
         ImageView imgFoto;
-        Button btnEnProceso, btnResuelto, btnPendiente, btnEliminar;
+        View layoutAcciones;
+        Button btnEnProceso, btnResuelto, btnPendiente, btnEliminar, btnRestaurar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,10 +164,12 @@ public class AdminReportAdapter extends RecyclerView.Adapter<AdminReportAdapter.
             txtFecha = itemView.findViewById(R.id.txtAdminFecha);
             txtEstado = itemView.findViewById(R.id.txtAdminEstado);
             imgFoto = itemView.findViewById(R.id.imgAdminFoto);
+            layoutAcciones = itemView.findViewById(R.id.layoutAdminAcciones);
             btnEnProceso = itemView.findViewById(R.id.btnAdminEnProceso);
             btnResuelto = itemView.findViewById(R.id.btnAdminResuelto);
             btnPendiente = itemView.findViewById(R.id.btnAdminPendiente);
             btnEliminar = itemView.findViewById(R.id.btnAdminEliminar);
+            btnRestaurar = itemView.findViewById(R.id.btnAdminRestaurar);
         }
     }
 }

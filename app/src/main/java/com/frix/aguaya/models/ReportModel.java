@@ -30,6 +30,11 @@ public class ReportModel implements Serializable {
     private String updatedAt;
     
     private String direccion;
+    
+    private int activo = 1;
+    
+    @SerializedName("deleted_at")
+    private String deletedAt;
 
     // Getters
     public int getId() { return id; }
@@ -45,6 +50,9 @@ public class ReportModel implements Serializable {
     public String getCreatedAt() { return createdAt; }
     public String getUpdatedAt() { return updatedAt; }
     public String getDireccion() { return direccion; }
+    public int getActivo() { return activo; }
+    public boolean isActivo() { return activo == 1; }
+    public String getDeletedAt() { return deletedAt; }
 
     // Setters
     public void setId(int id) { this.id = id; }
@@ -60,6 +68,8 @@ public class ReportModel implements Serializable {
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
+    public void setActivo(int activo) { this.activo = activo; }
+    public void setDeletedAt(String deletedAt) { this.deletedAt = deletedAt; }
 
     public String getTiempoRelativo() {
         if (createdAt == null || createdAt.isEmpty()) return "Hace un momento";

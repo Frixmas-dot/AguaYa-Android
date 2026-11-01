@@ -82,6 +82,7 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/layoutAdminAcciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -132,5 +133,18 @@
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAdminRestaurar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Restaurar reporte ↩️"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="#22c55e"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

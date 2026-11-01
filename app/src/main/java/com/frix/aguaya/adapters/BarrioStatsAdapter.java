@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BarrioStatsAdapter extends RecyclerView.Adapter<BarrioStatsAdapter.ViewHolder> {
     private final List<EstadisticasModel.BarrioCount> barrios = new ArrayList<>();
-    private final Context context;
+    private final  Context context;
     private int maxCantidad = 1;
 
     public BarrioStatsAdapter(Context context) {

@@ -42,9 +42,15 @@ public interface ApiService {
     @DELETE("api/reportes/{id}")
     Call<Void> eliminarReporte(@Path("id") int id);
 
+    @PATCH("api/reportes/{id}/restaurar")
+    Call<Void> restaurarReporte(@Path("id") int id);
+
     @POST("api/reportes/{id}/confirmar")
     Call<Void> confirmarReporte(@Path("id") int id);
 
     @GET("api/estadisticas")
     Call<EstadisticasModel> getEstadisticas();
+
+    @GET("api/barrios")
+    Call<List<com.frix.aguaya.models.BarrioModel>> getBarrios();
 }

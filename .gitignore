@@ -1,6 +1,10 @@
 *.iml
 .gradle
 /local.properties
+.env
+aguaya-backend/.env
+node_modules/
+aguaya-backend/node_modules/
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -13,3 +17,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+.env
+aguaya-backend/.env
+node_modules/
+aguaya-backend/node_modules/

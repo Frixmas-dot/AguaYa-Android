@@ -201,6 +201,42 @@ public class ReporteRepository {
         return success;
     }
 
+    public LiveData<Boolean> restaurarReporte(int id) {
+        MutableLiveData<Boolean> success = new MutableLiveData<>();
+        cargando.setValue(true);
+        apiService.restaurarReporte(id).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                cargando.setValue(false);
+                success.setValue(response.isSuccessful());
+                if (!response.isSuccessful()) error.setValue("Error al restaurar reporte");
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                cargando.setValue(false);
+                error.setValue(t.getMessage());
+                success.setValue(false);
+            }
+        });
+        return success;
+    }
+
+    public LiveData<List<com.frix.aguaya.models.BarrioModel>> getBarrios() {
+        MutableLiveData<List<com.frix.aguaya.models.BarrioModel>> data = new MutableLiveData<>();
+        apiService.getBarrios().enqueue(new Callback<List<com.frix.aguaya.models.BarrioModel>>() {
+            @Override
+            public void onResponse(Call<List<com.frix.aguaya.models.BarrioModel>> call, Response<List<com.frix.aguaya.models.BarrioModel>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    data.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<com.frix.aguaya.models.BarrioModel>> call, Throwable t) {
+            }
+        });
+        return data;
+    }
+
     public LiveData<Boolean> confirmarReporte(int id) {
         MutableLiveData<Boolean> success = new MutableLiveData<>();
         cargando.setValue(true);

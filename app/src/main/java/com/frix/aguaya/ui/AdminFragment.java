@@ -67,9 +67,19 @@ public class AdminFragment extends Fragment {
             @Override
             public void onEliminar(int id) {
                 new AlertDialog.Builder(requireContext())
-                    .setTitle("Eliminar reporte")
-                    .setMessage("¿Estás seguro de que deseas eliminar este reporte?")
-                    .setPositiveButton("Eliminar", (dialog, which) -> viewModel.eliminarReporte(id))
+                    .setTitle("Archivar reporte")
+                    .setMessage("¿Deseas archivar este reporte? Se ocultará del mapa y las estadísticas públicas, pero se conservará en el histórico del sistema.")
+                    .setPositiveButton("Archivar", (dialog, which) -> viewModel.eliminarReporte(id))
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+            }
+
+            @Override
+            public void onRestaurar(int id) {
+                new AlertDialog.Builder(requireContext())
+                    .setTitle("Restaurar reporte")
+                    .setMessage("¿Deseas restaurar este reporte? Volverá a ser visible en el mapa y estadísticas públicas.")
+                    .setPositiveButton("Restaurar", (dialog, which) -> viewModel.restaurarReporte(id))
                     .setNegativeButton("Cancelar", null)
                     .show();
             }
@@ -87,6 +97,7 @@ public class AdminFragment extends Fragment {
             if (checkedId == R.id.chipPendientes) filtro = "pendiente";
             else if (checkedId == R.id.chipEnProceso) filtro = "en_proceso";
             else if (checkedId == R.id.chipResueltos) filtro = "resuelto";
+            else if (checkedId == R.id.chipArchivados) filtro = "archivado";
             
             viewModel.filtroEstado.setValue(filtro);
             viewModel.cargarReportes();
