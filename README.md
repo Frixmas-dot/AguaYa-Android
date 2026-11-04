@@ -102,4 +102,4 @@ node server.js
 * **Jesús Torregrosa**
 * **Mateus Nuñez**
 
-Proyecto desarrollado para el **2do Seguimiento de Proyecto de Software**, Universidad del Magdalena.
+Proyecto desarrollado para el **4do Seguimiento de Proyecto de Software**, Corporación Bolivariana del Norte.
