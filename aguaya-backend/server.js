@@ -15,7 +15,7 @@ const app  = express()
 const PORT = process.env.PORT || 3001
 
 // ── Middlewares ──────────────────────────────────────────────
-app.use(cors({ origin: ['http://localhost:8080', 'http://localhost:5173'] }))
+app.use(cors()) // Permite peticiones desde el frontend web (Nginx / localhost) y app móvil
 app.use(express.json())
 
 // ── Cloudinary ───────────────────────────────────────────────

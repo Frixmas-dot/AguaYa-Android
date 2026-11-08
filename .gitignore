@@ -1,3 +1,4 @@
+.idea/
 *.iml
 .gradle
 /local.properties
@@ -5,7 +6,11 @@
 aguaya-backend/.env
 node_modules/
 aguaya-backend/node_modules/
-/.idea/caches
+aguaya-frontend/node_modules/
+aguaya-frontend/dist/
+.env
+aguaya-backend/.env
+aguaya-frontend/.env
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
