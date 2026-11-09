@@ -11,9 +11,20 @@ echo "=========================================================="
 echo "💧 AguaYa — Despliegue en AWS EC2 (Nginx + Node.js + MySQL)"
 echo "=========================================================="
 
+# 0. Configurar Swap (2GB) para prevenir Out-Of-Memory en instancias t2.micro/t3.micro
+if [ ! -f /swapfile ]; then
+    echo "🧠 [0/7] Creando 2GB de memoria Swap para compilación..."
+    sudo fallocate -l 2G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    echo "✔ Memoria Swap configurada."
+fi
+
 # 1. Actualizar repositorios del sistema
 echo "📦 [1/7] Actualizando paquetes de Ubuntu..."
-sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get update -y
 sudo apt-get install -y curl git ufw build-essential nginx mysql-server
 
 # 2. Instalar Node.js 20 LTS
@@ -23,6 +34,10 @@ if ! command -v node &> /dev/null; then
     sudo apt-get install -y nodejs
 fi
 
+# Configurar npm para resolver dependencias antiguas de Cloudinary sin bloquearse
+sudo npm config set legacy-peer-deps true --global 2>/dev/null || true
+npm config set legacy-peer-deps true 2>/dev/null || true
+
 # Instalar PM2 para gestión de procesos en segundo plano
 sudo npm install -g pm2
 
@@ -31,7 +46,6 @@ echo "🗄️ [3/7] Configurando base de datos MySQL..."
 MYSQL_PASS="08042003"
 export MYSQL_PWD="${MYSQL_PASS}"
 
-# Configurar contraseña de root según el estado de MySQL
 if mysql -u root -e "SELECT 1;" &>/dev/null; then
     echo "✔ MySQL ya responde con la contraseña configurada."
 elif sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_PASS}'; FLUSH PRIVILEGES;" &>/dev/null; then
@@ -99,15 +113,15 @@ CLOUDINARY_API_SECRET=-2DT9GgXWB16awNnq8i6jqZQVvo
 EOF
 fi
 
-npm install --production
-pm2 stop aguaya-backend || true
+npm install --omit=dev --legacy-peer-deps
+pm2 stop aguaya-backend 2>/dev/null || true
 pm2 start server.js --name "aguaya-backend"
 pm2 save
 
 # 7. Compilar Frontend Vue 3
 echo "🎨 [6/7] Compilando Frontend Vue 3..."
 cd /var/www/aguaya/frontend
-npm install
+npm install --legacy-peer-deps
 npm run build
 
 # 8. Configurar Nginx
@@ -119,7 +133,7 @@ sudo ln -sf /etc/nginx/sites-available/aguaya /etc/nginx/sites-enabled/aguaya
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Ajustar permisos para que Nginx pueda servir los archivos
-sudo chmod 755 /var/www /var/www/aguaya /var/www/aguaya/frontend /var/www/aguaya/frontend/dist 2>/dev/null || true
+sudo chmod -R 755 /var/www/aguaya/frontend/dist 2>/dev/null || true
 
 # Verificar y reiniciar Nginx
 sudo nginx -t
