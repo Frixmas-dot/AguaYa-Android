@@ -26,15 +26,33 @@ fi
 # Instalar PM2 para gestión de procesos en segundo plano
 sudo npm install -g pm2
 
-# 3. Configurar Base de Datos MySQL
+# 3. Configurar Base de Datos MySQL de forma resiliente
 echo "🗄️ [3/7] Configurando base de datos MySQL..."
 MYSQL_PASS="08042003"
+export MYSQL_PWD="${MYSQL_PASS}"
 
-sudo mysql -e "CREATE DATABASE IF NOT EXISTS aguaya CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${MYSQL_PASS}';"
-sudo mysql -e "FLUSH PRIVILEGES;"
+# Configurar contraseña de root según el estado de MySQL
+if mysql -u root -e "SELECT 1;" &>/dev/null; then
+    echo "✔ MySQL ya responde con la contraseña configurada."
+elif sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_PASS}'; FLUSH PRIVILEGES;" &>/dev/null; then
+    echo "✔ Contraseña de root asignada mediante sudo mysql."
+elif [ -f /etc/mysql/debian.cnf ] && sudo mysql --defaults-file=/etc/mysql/debian.cnf -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_PASS}'; FLUSH PRIVILEGES;" &>/dev/null; then
+    echo "✔ Contraseña de root asignada mediante debian.cnf."
+else
+    echo "⚠️ Reiniciando MySQL temporalmente para ajustar credenciales de root..."
+    sudo systemctl stop mysql
+    sudo mkdir -p /var/run/mysqld
+    sudo chown mysql:mysql /var/run/mysqld
+    sudo mysqld_safe --skip-grant-tables --skip-networking &
+    sleep 4
+    mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_PASS}'; FLUSH PRIVILEGES;" 2>/dev/null || true
+    sudo pkill -f mysqld || true
+    sleep 2
+    sudo systemctl start mysql
+fi
 
-echo "✔ MySQL configurado con base de datos 'aguaya'."
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS aguaya CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+echo "✔ MySQL configurado y base de datos 'aguaya' lista."
 
 # 4. Preparar directorios en /var/www/aguaya
 echo "📁 [4/7] Preparando directorios en /var/www/aguaya..."
@@ -54,8 +72,8 @@ fi
 
 # Migrar base de datos con los 90+ barrios y soft delete
 echo "Poblando base de datos con esquema y barrios oficiales..."
-mysql -u root -p${MYSQL_PASS} aguaya < "$REPO_DIR/aguaya-backend/schema.sql"
-mysql -u root -p${MYSQL_PASS} aguaya < "$REPO_DIR/aguaya-backend/migracion_v2.sql"
+mysql -u root aguaya < "$REPO_DIR/aguaya-backend/schema.sql"
+mysql -u root aguaya < "$REPO_DIR/aguaya-backend/migracion_v2.sql"
 
 # Copiar archivos al directorio web
 cp -r "$REPO_DIR/aguaya-backend/"* /var/www/aguaya/backend/
@@ -99,6 +117,9 @@ sudo cp "$REPO_DIR/deployment/nginx/aguaya.conf" /etc/nginx/sites-available/agua
 # Habilitar sitio y deshabilitar default
 sudo ln -sf /etc/nginx/sites-available/aguaya /etc/nginx/sites-enabled/aguaya
 sudo rm -f /etc/nginx/sites-enabled/default
+
+# Ajustar permisos para que Nginx pueda servir los archivos
+sudo chmod 755 /var/www /var/www/aguaya /var/www/aguaya/frontend /var/www/aguaya/frontend/dist 2>/dev/null || true
 
 # Verificar y reiniciar Nginx
 sudo nginx -t
