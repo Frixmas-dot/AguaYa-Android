@@ -86,8 +86,8 @@ fi
 
 # Migrar base de datos con los 90+ barrios y soft delete
 echo "Poblando base de datos con esquema y barrios oficiales..."
-mysql -u root aguaya < "$REPO_DIR/aguaya-backend/schema.sql"
-mysql -u root aguaya < "$REPO_DIR/aguaya-backend/migracion_v2.sql"
+mysql -u root aguaya < "$REPO_DIR/aguaya-backend/schema.sql" || true
+mysql -u root aguaya < "$REPO_DIR/aguaya-backend/migracion_v2.sql" || true
 
 # Copiar archivos al directorio web
 cp -r "$REPO_DIR/aguaya-backend/"* /var/www/aguaya/backend/

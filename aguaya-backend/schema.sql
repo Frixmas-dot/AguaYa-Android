@@ -25,7 +25,12 @@ CREATE TABLE IF NOT EXISTS reportes (
   activo      TINYINT(1)      NOT NULL DEFAULT 1 COMMENT '1: activo/visible, 0: archivado/soft delete',
   deleted_at  DATETIME        NULL DEFAULT NULL COMMENT 'Fecha de archivado',
   created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_tipo (tipo),
+  INDEX idx_barrio (barrio),
+  INDEX idx_estado (estado),
+  INDEX idx_urgencia (urgencia),
+  INDEX idx_fecha (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ------------------------------------------------------------
@@ -53,24 +58,15 @@ CREATE TABLE IF NOT EXISTS confirmaciones (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ------------------------------------------------------------
---  Índices
+--  Datos de ejemplo (idempotente)
 -- ------------------------------------------------------------
-CREATE INDEX  idx_tipo      ON reportes(tipo);
-CREATE INDEX  idx_barrio    ON reportes(barrio);
-CREATE INDEX  idx_estado    ON reportes(estado);
-CREATE INDEX  idx_urgencia  ON reportes(urgencia);
-CREATE INDEX  idx_fecha     ON reportes(created_at);
-
--- ------------------------------------------------------------
---  Datos de ejemplo
--- ------------------------------------------------------------
-INSERT INTO reportes (barrio, tipo, descripcion, urgencia, estado, lat, lng, created_at) VALUES
-  ('El Rodadero', 'Sin agua',     'Sin agua desde ayer en el sector.',         'alta',  'pendiente',  11.2050, -74.2250, DATE_SUB(NOW(), INTERVAL 2  HOUR)),
-  ('Centro',      'Baja presión', 'Baja presión en el servicio.',              'media', 'en_proceso', 11.2408, -74.2110, DATE_SUB(NOW(), INTERVAL 4  HOUR)),
-  ('Gaira',       'Agua sucia',   'Agua con sedimentos y color marrón.',       'media', 'pendiente',  11.1880, -74.2150, DATE_SUB(NOW(), INTERVAL 5  HOUR)),
-  ('Bastidas',    'Fuga',         'Fuga visible en tubería principal.',         'alta',  'pendiente',  11.2520, -74.1850, DATE_SUB(NOW(), INTERVAL 6  HOUR)),
-  ('Pescaíto',    'Sin agua',     'Corte total sin aviso previo.',             'alta',  'en_proceso', 11.2489, -74.1972, DATE_SUB(NOW(), INTERVAL 7  HOUR)),
-  ('La Paz',      'Baja presión', 'Presión muy baja desde la mañana.',         'baja',  'resuelto',   11.2350, -74.2200, DATE_SUB(NOW(), INTERVAL 9  HOUR));
+INSERT IGNORE INTO reportes (id, barrio, tipo, descripcion, urgencia, estado, lat, lng, created_at) VALUES
+  (1, 'El Rodadero', 'Sin agua',     'Sin agua desde ayer en el sector.',         'alta',  'pendiente',  11.2050, -74.2250, DATE_SUB(NOW(), INTERVAL 2  HOUR)),
+  (2, 'Centro',      'Baja presión', 'Baja presión en el servicio.',              'media', 'en_proceso', 11.2408, -74.2110, DATE_SUB(NOW(), INTERVAL 4  HOUR)),
+  (3, 'Gaira',       'Agua sucia',   'Agua con sedimentos y color marrón.',       'media', 'pendiente',  11.1880, -74.2150, DATE_SUB(NOW(), INTERVAL 5  HOUR)),
+  (4, 'Bastidas',    'Fuga',         'Fuga visible en tubería principal.',         'alta',  'pendiente',  11.2520, -74.1850, DATE_SUB(NOW(), INTERVAL 6  HOUR)),
+  (5, 'Pescaíto',    'Sin agua',     'Corte total sin aviso previo.',             'alta',  'en_proceso', 11.2489, -74.1972, DATE_SUB(NOW(), INTERVAL 7  HOUR)),
+  (6, 'La Paz',      'Baja presión', 'Presión muy baja desde la mañana.',         'baja',  'resuelto',   11.2350, -74.2200, DATE_SUB(NOW(), INTERVAL 9  HOUR));
 
 -- ------------------------------------------------------------
 --  Vistas para materia de Bases de Datos
